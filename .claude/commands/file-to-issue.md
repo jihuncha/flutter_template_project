@@ -20,7 +20,7 @@ Convert bullet-point files into GitHub Issues using AI Review-First methodology.
 ### Clear Instructions
 
 - Eliminate ambiguity in file parsing and template conversion
-- Define specific outcomes: structured Japanese content → GitHub template format → English translation → GitHub Issue
+- Define specific outcomes: structured Korean content → GitHub template format → English translation → GitHub Issue
 - Provide structured review templates for content quality
 
 ### Structured Quality Assessment
@@ -65,16 +65,16 @@ Constraint: Summarize findings within 400 characters
 
 ### Phase 1: File Processing and Initial Conversion
 
-**Objective**: Create structured Japanese content for review
+**Objective**: Create structured Korean content for review
 
 **Actions**:
 
 1. **File Access Validation**: Verify file exists and is readable
 2. **Content Parsing**: Extract bullet points and structure
-3. **Template Conversion**: Transform to GitHub ISSUE_TEMPLATE format in Japanese
+3. **Template Conversion**: Transform to GitHub ISSUE_TEMPLATE format in Korean
 4. **Initial Quality Check**: Validate content structure against GitHub Issue templates
 
-**Success Criteria**: Well-formed Japanese GitHub ISSUE_TEMPLATE content
+**Success Criteria**: Well-formed Korean GitHub ISSUE_TEMPLATE content
 
 ### Phase 2: Critical Review Cycles (3-4 Iterations)
 
@@ -111,10 +111,10 @@ Focus on the highest priority issues first.
 **Actions**:
 
 1. **Create Issue File**: Generate new file with `.issue.md` extension containing GitHub ISSUE_TEMPLATE format
-2. **Human Approval**: Display Japanese content for "Approve" confirmation
-3. **Translation Processing**: Convert Japanese to English using Claude 4
+2. **Human Approval**: Display Korean content for "Approve" confirmation
+3. **Translation Processing**: Convert Korean to English using Claude 4
 4. **GitHub Issue Creation**: Create issue with English content using GitHub CLI
-5. **Japanese Comment Addition**: Add original Japanese content as comment
+5. **Korean Comment Addition**: Add original Korean content as comment
 6. **File Cleanup**: Remove created `.issue.md` file after successful processing
 
 **Success Criteria**: Successfully created GitHub Issue with both languages and GitHub template compliance
@@ -295,9 +295,9 @@ abstract class TemplateConverter {
       'fix',
       'error',
       'issue',
-      'バグ',
-      '修正',
-      '不具合',
+      '버그',
+      '수정',
+      '문제',
     ]
     return bugKeywords.some(keyword => content.toLowerCase().includes(keyword))
       ? 'bugfix'
@@ -307,8 +307,8 @@ abstract class TemplateConverter {
   protected inferPriority(
     bullets: BulletPoint[]
   ): 'low' | 'medium' | 'high' | 'urgent' {
-    const urgentKeywords = ['urgent', '緊急', 'critical', '重大']
-    const highKeywords = ['important', '重要', 'blocking', 'ブロッキング']
+    const urgentKeywords = ['urgent', '긴급', 'critical', '중대']
+    const highKeywords = ['important', '중요', 'blocking', '차단']
     const content = bullets
       .map(b => b.content)
       .join(' ')
@@ -363,50 +363,50 @@ ${this.inferTechnicalContext(bullets)}
 - [ ] ${details}
 
 ### Non-Functional Requirements:
-- [ ] レスポンス時間: 2秒以内
-- [ ] クロスプラットフォーム対応（iOS/Android）
-- [ ] アクセシビリティ対応（WCAG 2.1 AA準拠）
+- [ ] 응답 시간: 2초 이내
+- [ ] 크로스 플랫폼 지원(iOS/Android)
+- [ ] 접근성 지원(WCAG 2.1 AA 준수)
 
 ### Security Requirements:
-- [ ] 入力値検証の実装
-- [ ] 適切なエラーハンドリング
-- [ ] セキュリティテストの実施
+- [ ] 입력값 검증 구현
+- [ ] 적절한 오류 처리
+- [ ] 보안 테스트 실시
 
 ## Technical Constraints and Guidelines
 
 ### Technology Stack:
-- [ ] プロジェクトのFlutter + Riverpodアーキテクチャに準拠
-- [ ] 既存のgo_routerナビゲーションを活用
-- [ ] slang i18nシステムとの統合
-- [ ] SOLID原則の遵守
+- [ ] 프로젝트의 Flutter + Riverpod 아키텍처에 준수
+- [ ] 기존 go_router 네비게이션 활용
+- [ ] slang i18n 시스템과의 통합
+- [ ] SOLID 원칙 준수
 
 ### Code Standards:
-- [ ] 包括的なユニットテストを含む
-- [ ] UIコンポーネントのウィジェットテスト
-- [ ] 既存のコード規約に従う
-- [ ] 適切なエラーハンドリングを含む
+- [ ] 포괄적인 단위 테스트 포함
+- [ ] UI 컴포넌트의 위젯 테스트
+- [ ] 기존 코드 규약 준수
+- [ ] 적절한 오류 처리 포함
 
 ## AI Review-First Quality Criteria
 
 ### Review Categories (Priority Order):
 
 **High Priority - Security:**
-- [ ] セキュリティ脆弱性の排除（不正なデータ入力、スクリプト実行等）
-- [ ] 適切な入力値検証とデータ処理
-- [ ] 認証・認可の適切な実装
-- [ ] 機密データの適切な取り扱い
+- [ ] 보안 취약점 제거(부정 데이터 입력, 스크립트 실행 등)
+- [ ] 적절한 입력값 검증과 데이터 처리
+- [ ] 인증·인가의 적절한 구현
+- [ ] 기밀 데이터의 적절한 취급
 
 **Medium Priority - SOLID Principles:**
-- [ ] 単一責任原則の遵守
-- [ ] 開放閉鎖原則の適用
-- [ ] 依存性注入の適切な実装
-- [ ] インターフェース分離の実現
+- [ ] 단일 책임 원칙 준수
+- [ ] 개방-폐쇄 원칙 적용
+- [ ] 의존성 주입의 적절한 구현
+- [ ] 인터페이스 분리의 실현
 
 **Low Priority - Performance:**
-- [ ] 効率的な状態管理
-- [ ] 最小限の再レンダリング・リビルド
-- [ ] 適切なメモリ管理
-- [ ] 最適化されたネットワークリクエスト
+- [ ] 효율적인 상태 관리
+- [ ] 최소한의 재렌더링·리빌드
+- [ ] 적절한 메모리 관리
+- [ ] 최적화된 네트워크 요청
 
 ### Review Constraints:
 - Each review summary: ≤ 400 characters
@@ -416,67 +416,67 @@ ${this.inferTechnicalContext(bullets)}
 ## Acceptance Criteria
 
 ### Core Functionality:
-- [ ] 主要機能が正常に動作する
-- [ ] ユーザーインターフェースが直感的である
-- [ ] エラーケースが適切に処理される
+- [ ] 주요 기능이 정상적으로 동작한다
+- [ ] 사용자 인터페이스가 직관적이다
+- [ ] 오류 상황이 적절히 처리된다
 
 ### Quality Gates:
-- [ ] 全ての自動テストが成功（ユニット、ウィジェット、統合）
-- [ ] 静的解析（dart analyze）が成功
-- [ ] コードフォーマット（dart format）が適用済み
-- [ ] AIレビューサイクルが完了（3-4回の反復）
-- [ ] セキュリティレビューが承認
-- [ ] パフォーマンスベンチマークが達成
-- [ ] アクセシビリティ要件が満たされる
+- [ ] 모든 자동 테스트가 성공(단위, 위젯, 통합)
+- [ ] 정적 분석(dart analyze)이 성공
+- [ ] 코드 포맷(dart format)이 적용됨
+- [ ] AI 리뷰 사이클이 완료(3-4회 반복)
+- [ ] 보안 리뷰가 승인
+- [ ] 성능 벤치마크가 달성
+- [ ] 접근성 요구사항이 충족됨
 
 ### Documentation:
-- [ ] APIドキュメントが更新済み
-- [ ] ユーザーガイドが更新済み（該当する場合）
-- [ ] 複雑なロジックにコードコメントが追加済み
+- [ ] API 문서가 업데이트됨
+- [ ] 사용자 가이드가 업데이트됨(해당되는 경우)
+- [ ] 복잡한 로직에 코드 코멘트가 추가됨
 
 ## Testing Strategy
 
 ### Test Types Required:
-- [ ] ビジネスロジックのユニットテスト
-- [ ] UIコンポーネントのウィジェットテスト
-- [ ] クリティカルフローの統合テスト
-- [ ] セキュリティテスト
+- [ ] 비즈니스 로직의 단위 테스트
+- [ ] UI 컴포넌트의 위젯 테스트
+- [ ] 크리티컬 플로우의 통합 테스트
+- [ ] 보안 테스트
 
 ### Test Coverage Goals:
-- [ ] ビジネスロジック: 90%+
-- [ ] UIコンポーネント: 80%+
-- [ ] クリティカルパス: 100%
+- [ ] 비즈니스 로직: 90%+
+- [ ] UI 컴포넌트: 80%+
+- [ ] 크리티컬 경로: 100%
 
 ### Manual Testing:
-- [ ] クロスプラットフォーム互換性（iOS/Android）
-- [ ] スクリーンリーダーでのアクセシビリティテスト
-- [ ] 負荷テスト
+- [ ] 크로스 플랫폼 호환성(iOS/Android)
+- [ ] 스크린 리더로 접근성 테스트
+- [ ] 부하 테스트
 
 ## Claude Code Implementation Instructions
 
 ### Implementation Approach:
-- [ ] AIレビューファースト設計を使用: 小さなドラフト → 厳しい批評 → 再生成 → リリース
-- [ ] セキュリティ → SOLID → パフォーマンスに焦点を当てた3-4回のレビューサイクル
-- [ ] 最初に最小限の動作実装を作成
-- [ ] 包括的なエラーハンドリングを含む
-- [ ] プロジェクトのRiverpod + go_routerパターンに従う
+- [ ] AI 리뷰 퍼스트 설계 사용: 작은 초안 → 엄격한 비평 → 재생성 → 릴리즈
+- [ ] 보안 → SOLID → 성능에 초점을 맞춨 3-4회의 리뷰 사이클
+- [ ] 처음에 최소한의 동작 구현체 작성
+- [ ] 포괄적인 오류 처리 포함
+- [ ] 프로젝트의 Riverpod + go_router 패턴 준수
 
 ### Automation Settings:
-- [ ] バックグラウンドタスクを有効化: \`ENABLE_BACKGROUND_TASKS=true\`
-- [ ] 分離開発にgit worktreeを使用
-- [ ] 完了時に日本語でPRを作成
-- [ ] 完了確認のためにGitHub Actionsを監視
+- [ ] 백그라운드 작업 활성화: \`ENABLE_BACKGROUND_TASKS=true\`
+- [ ] 독립적 개발을 위해 git worktree 사용
+- [ ] 완료 시 한국어로 PR 생성
+- [ ] 완료 확인을 위해 GitHub Actions 모니터링
 
 ### Quality Assurance:
-- [ ] コミット前に \`melos run analyze\` を実行
-- [ ] コミット前に \`melos run test\` を実行
-- [ ] コミット前に \`melos run format\` を実行
-- [ ] 全てのCIチェックが成功することを確認
+- [ ] 커밋 전에 \`melos run analyze\` 실행
+- [ ] 커밋 전에 \`melos run test\` 실행
+- [ ] 커밋 전에 \`melos run format\` 실행
+- [ ] 모든 CI 검사가 성공하는지 확인
 
 ## Additional Context
 
 **Expected Output Format:**
-機能の詳細な説明、実装ガイドライン、テスト戦略を含む構造化されたLinear Issue`
+기능의 상세한 설명, 구현 가이드라인, 테스트 전략을 포함한 구조화된 GitHub Issue`
   }
 
   private inferBusinessContext(bullets: BulletPoint[]): string {
@@ -496,7 +496,7 @@ ${this.inferTechnicalContext(bullets)}
   }
 
   private inferTechnicalContext(bullets: BulletPoint[]): string {
-    return '現在の実装では要件を満たすのが困難な状況にある'
+    return '현재의 구현에서는 요구사항을 충족하기 어려운 상황입니다'
   }
 }
 
@@ -540,38 +540,38 @@ ${mainContent}
 - [ ] ${details}
 
 ### Expected Behavior:
-- [ ] 正常な動作が期待される
-- [ ] エラーが発生しない
-- [ ] 適切なフィードバックが提供される
+- [ ] 정상적인 동작이 기대됨
+- [ ] 오류가 발생하지 않음
+- [ ] 적절한 피드백이 제공됨
 
 ### Steps to Reproduce:
-- [ ] 具体的な再現手順を記載
-- [ ] 環境情報を含める
-- [ ] 発生条件を明確にする
+- [ ] 구체적인 재현 단계 기록
+- [ ] 환경 정보 포함
+- [ ] 발생 조건 명확히 설명
 
 ## Technical Analysis
 
 ### Root Cause Analysis:
-- [ ] 問題の原因を特定
-- [ ] 影響範囲を調査
-- [ ] 関連するコンポーネントを確認
+- [ ] 문제의 원인 파악
+- [ ] 영향 범위 조사
+- [ ] 관련 컴포넌트 확인
 
 ### Fix Strategy:
-- [ ] 修正方針の決定
-- [ ] 副作用の検討
-- [ ] テスト戦略の策定
+- [ ] 수정 방침 결정
+- [ ] 부작용 검토
+- [ ] 테스트 전략 수립
 
 ## Quality Assurance
 
 ### Testing Requirements:
-- [ ] バグ修正のユニットテスト
-- [ ] 回帰テストの実施
-- [ ] 統合テストの確認
+- [ ] 버그 수정의 단위 테스트
+- [ ] 회귀 테스트 실시
+- [ ] 통합 테스트 확인
 
 ### Validation Criteria:
-- [ ] 問題が解決されている
-- [ ] 新たな問題が発生していない
-- [ ] パフォーマンスに影響がない`
+- [ ] 문제가 해결되었음
+- [ ] 새로운 문제가 발생하지 않음
+- [ ] 성능에 영향이 없음`
   }
 }
 
@@ -619,8 +619,8 @@ class GitHubCLIIntegration {
       // Step 3: Create GitHub Issue via CLI
       const issueData = await this.createIssueViaCLI(translatedTemplate)
 
-      // Step 4: Add Japanese content as comment
-      await this.addJapaneseComment(issueData.number, originalContent)
+      // Step 4: Add Korean content as comment
+      await this.addKoreanComment(issueData.number, originalContent)
 
       console.log(`✅ GitHub Issue created: ${issueData.url}`)
       return issueData.url
@@ -795,7 +795,7 @@ class GitHubCLIIntegration {
     }
   }
 
-  private async addJapaneseComment(
+  private async addKoreanComment(
     issueNumber: string,
     originalContent: string
   ): Promise<void> {
@@ -804,21 +804,21 @@ class GitHubCLIIntegration {
       const { promisify } = require('util')
       const execAsync = promisify(exec)
 
-      const comment = `## 元の日本語コンテンツ
+      const comment = `## 원본 한국어 콘텐츠
 
 ${originalContent}
 
 ---
-*This comment contains the original Japanese content that was translated to create this issue.*`
+*이 코멘트는 이슈를 만들기 위해 번역된 원본 한국어 콘텐츠를 포함합니다.*`
         .replace(/'/g, "'\''")
         .replace(/"/g, '\"')
 
       const command = `gh issue comment ${issueNumber} --body "${comment}"`
 
       await execAsync(command)
-      console.log('📝 Added Japanese content as comment')
+      console.log('📝 Added Korean content as comment')
     } catch (error) {
-      console.warn(`⚠️ Failed to add Japanese comment: ${error.message}`)
+      console.warn(`⚠️ Failed to add Korean comment: ${error.message}`)
       // Don't fail the entire process if comment addition fails
     }
   }
@@ -828,7 +828,7 @@ ${originalContent}
   ): Promise<IssueTemplate> {
     // Use Claude for translation with explicit instructions
     const translationPrompt = `
-Translate the following GitHub Issue template from Japanese to English.
+Translate the following GitHub Issue template from Korean to English.
 Maintain the exact structure and formatting.
 Keep technical terms and code examples unchanged.
 
@@ -980,7 +980,7 @@ class FileToIssueCommand {
   }
 
   private async requestApproval(template: IssueTemplate): Promise<boolean> {
-    console.log('📝 Generated Japanese Content:')
+    console.log('📝 Generated Korean Content:')
     console.log(`## ${template.title}\n`)
 
     // Show first few lines of description for preview
@@ -1020,9 +1020,9 @@ class FileToIssueCommand {
       'fix',
       'error',
       'issue',
-      'バグ',
-      '修正',
-      '不具合',
+      '버그',
+      '수정',
+      '문제',
     ]
     return bugKeywords.some(keyword => content.toLowerCase().includes(keyword))
       ? 'bugfix'
@@ -1131,7 +1131,7 @@ class FileToIssueCommand {
 - ✅ **File Reading**: Secure file access with proper validation
 - ✅ **Content Parsing**: Accurate bullet point structure extraction
 - ✅ **Template Conversion**: GitHub ISSUE_TEMPLATE format generation
-- ✅ **Translation**: High-quality Japanese to English conversion
+- ✅ **Translation**: High-quality Korean to English conversion
 - ✅ **GitHub Integration**: Successful Issue creation with bilingual content
 - ✅ **Issue File Creation**: Generate `.issue.md` file with proper format
 - ✅ **File Cleanup**: Safe removal of created `.issue.md` files
@@ -1154,9 +1154,9 @@ class FileToIssueCommand {
 🏗️ Converting to GitHub ISSUE_TEMPLATE format...
 📝 Created issue file: tasks.issue.md
 
-📝 Generated Japanese Content:
-## タイトル
-新機能：ユーザー認証システム
+📝 Generated Korean Content:
+## 제목
+새로운 기능: 사용자 인증 시스템
 
 ## Context and Motivation
 ...
@@ -1170,7 +1170,7 @@ class FileToIssueCommand {
 ✅ Authentication verified
 📤 Creating GitHub issue in repository: owner/repository-name
 🏷️ Labels: enhancement, priority: medium
-📝 Added Japanese content as comment
+📝 Added Korean content as comment
 🗑️ Cleaning up issue file...
 
 ✅ GitHub Issue created: https://github.com/owner/repository-name/issues/123
@@ -1190,7 +1190,7 @@ class FileToIssueCommand {
 ### Optimal Use Cases
 
 - **Structured bullet-point files** with clear hierarchy
-- **Japanese content** requiring English translation
+- **Korean content** requiring English translation
 - **Feature requests** and bug reports in bullet format
 - **Planning documents** needing GitHub Issue Template format
 

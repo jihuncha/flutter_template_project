@@ -1,10 +1,10 @@
 # Prompt Review Command - Claude 4 Best Practices
 
-**IMPORTANT**: This command implements AI Review-First design following Claude 4 best practices for automated prompt and code quality evaluation with Japanese reporting.
+**IMPORTANT**: This command implements AI Review-First design following Claude 4 best practices for automated prompt and code quality evaluation with Korean reporting.
 
 ## Overview
 
-Evaluate files according to Claude 4 best practices and provide comprehensive Japanese evaluation. This command reads local files passed as arguments, analyzes content based on structured review templates, and creates detailed review files without external references.
+Evaluate files according to Claude 4 best practices and provide comprehensive Korean evaluation. This command reads local files passed as arguments, analyzes content based on structured review templates, and creates detailed review files without external references.
 
 ## Core Principles (Claude 4 Best Practices)
 
@@ -12,7 +12,7 @@ Evaluate files according to Claude 4 best practices and provide comprehensive Ja
 
 ### AI Review-First Methodology
 
-- **Pattern**: File input → Critical review → Structured evaluation → Japanese report
+- **Pattern**: File input → Critical review → Structured evaluation → Korean report
 - **Approach**: Use AI as "Senior Reviewer" for comprehensive quality assessment
 - **Cycles**: Multi-perspective evaluation (Security → SOLID → Performance)
 - **Priority**: Security (High) → SOLID Principles (Medium) → Performance (Low)
@@ -28,10 +28,10 @@ Evaluate files according to Claude 4 best practices and provide comprehensive Ja
 Apply consistent evaluation framework:
 
 ```
-1. セキュリティ脆弱性 (高優先度) - Security vulnerabilities assessment
-2. SOLID原則違反 (中優先度) - SOLID principle violations analysis
-3. パフォーマンス最適化 (低優先度) - Performance optimization opportunities
-制約: 各カテゴリ400文字以内で要約
+1. 보안 취약점 (고우선도) - Security vulnerabilities assessment
+2. SOLID 원칙 위반 (중우선도) - SOLID principle violations analysis
+3. 성능 최적화 (저우선도) - Performance optimization opportunities
+제약: 각 카테고리 400자 이내로 요약
 ```
 
 ## Execution Modes
@@ -45,7 +45,7 @@ Apply consistent evaluation framework:
 **Behavior**:
 
 1. **Argument Validation**: Check if file path is provided
-2. **Early Termination**: If no arguments, display "⏺ ファイルパスを引数として提供してください" in red and terminate immediately
+2. **Early Termination**: If no arguments, display "⏺ 파일 경로를 인수로 제공해 주세요" in red and terminate immediately
 3. **No further processing** when no arguments provided
 
 ### Direct Mode (With File Path)
@@ -59,7 +59,7 @@ Apply consistent evaluation framework:
 - **No confirmation prompts** - immediate execution
 - Validate file path and accessibility
 - Begin content evaluation automatically
-- Generate structured Japanese review report
+- Generate structured Korean review report
 
 ## AI Review-First Processing Flow
 
@@ -81,40 +81,40 @@ Apply consistent evaluation framework:
 **Review Template** (Use this exact format):
 
 ```
-以下の内容をClaude 4ベストプラクティスに基づいてレビューしてください。
+다음 내용을 Claude 4 베스트 프랙티스에 따라 리뷰해 주세요.
 
-評価カテゴリ:
-1. セキュリティ脆弱性 (高優先度) - セキュリティリスク、入力検証、認証認可
-2. SOLID原則違反 (中優先度) - 設計原則、アーキテクチャパターン、保守性
-3. パフォーマンス最適化 (低優先度) - 効率性、スケーラビリティ、リソース使用
+평가 카테고리:
+1. 보안 취약점 (고우선도) - 보안 위험, 입력 검증, 인증 인가
+2. SOLID 원칙 위반 (중우선도) - 설계 원칙, 아키텍처 패턴, 유지보수성
+3. 성능 최적화 (저우선도) - 효율성, 확장성, 리소스 사용
 
-制約: 各カテゴリ400文字以内で具体的かつ実行可能なフィードバックを提供。
-最も優先度の高い問題に焦点を当ててください。
+제약: 각 카테고리 400자 이내로 구체적이고 실행 가능한 피드백 제공.
+가장 우선순위가 높은 문제에 초점을 맞춰 주세요.
 ```
 
 **Evaluation Process**:
 
-1. **高優先度評価**: セキュリティ脆弱性の包括的分析
-2. **中優先度評価**: SOLID原則とアーキテクチャ設計の検証
-3. **低優先度評価**: パフォーマンス最適化機会の特定
-4. **総合評価**: 全体的な品質スコアと改善提案
+1. **고우선도 평가**: 보안 취약점의 포괄적 분석
+2. **중우선도 평가**: SOLID 원칙과 아키텍처 설계의 검증
+3. **저우선도 평가**: 성능 최적화 기회의 특정
+4. **종합 평가**: 전체적인 품질 점수와 개선 제안
 
 **Quality Gates**:
 
-- Security: 重大なセキュリティリスクの特定と評価
-- Architecture: 設計原則違反の検出と改善提案
-- Performance: 最適化機会の特定と実装提案
+- Security: 중대한 보안 위험의 특정과 평가
+- Architecture: 설계 원칙 위반의 검출과 개선 제안
+- Performance: 최적화 기회의 특정과 구현 제안
 
-### Phase 3: Japanese Review Report Generation
+### Phase 3: Korean Review Report Generation
 
 **Actions**:
 
-1. **Review File Creation**: Generate `.review.<extension>` file with structured Japanese evaluation
+1. **Review File Creation**: Generate `.review.<extension>` file with structured Korean evaluation
 2. **Quality Score Calculation**: Comprehensive quality assessment with numeric scoring
 3. **Improvement Recommendations**: Specific, actionable improvement suggestions
 4. **Best Practice References**: Links to relevant Claude 4 best practices documentation
 
-**Quality Gate**: High-quality Japanese review report with actionable insights
+**Quality Gate**: High-quality Korean review report with actionable insights
 
 ## Enhanced Core Implementation
 
@@ -146,7 +146,7 @@ async function validateAndReadFile(
   // Input sanitization - prevent malicious file access
   if (!filePath || /[\x00-\x1f\x7f-\x9f]/.test(filePath)) {
     throw new SecurityError(
-      'アクセス拒否: 無効なファイルパス文字が含まれています'
+      '액세스 거부: 잘못된 파일 경로 문자가 포함되어 있습니다'
     )
   }
 
@@ -162,21 +162,21 @@ async function validateAndReadFile(
     relativePath.includes('..')
   ) {
     throw new SecurityError(
-      'アクセス拒否: ディレクトリトラバーサル攻撃の試行が検出されました'
+      '액세스 거부: 디렉토리 트래버샴 공격 시도가 감지되었습니다'
     )
   }
 
   // Validate file extension
   const ext = extname(filePath).toLowerCase()
   if (!ALLOWED_EXTENSIONS.includes(ext)) {
-    throw new ValidationError(`サポートされていないファイル拡張子: ${ext}`)
+    throw new ValidationError(`지원되지 않는 파일 확장자: ${ext}`)
   }
 
   // Check file size and permissions
   const stats = await stat(resolvedPath)
   if (stats.size > MAX_FILE_SIZE) {
     throw new ValidationError(
-      `ファイルサイズが大きすぎます: ${stats.size} bytes`
+      `파일 크기가 너무 큽니다: ${stats.size} bytes`
     )
   }
 
@@ -252,8 +252,8 @@ class Claude4BestPracticesEvaluator {
       if (matches) {
         issues.push({
           severity: 'critical',
-          description: 'ハードコードされた機密情報が検出されました',
-          suggestion: '環境変数やセキュアな設定ファイルを使用してください',
+          description: '하드코딩된 기밀 정보가 감지되었습니다',
+          suggestion: '환경 변수나 보안 설정 파일을 사용해 주세요',
         })
       }
     })
@@ -262,8 +262,8 @@ class Claude4BestPracticesEvaluator {
     if (content.includes('query') && content.includes('+')) {
       issues.push({
         severity: 'major',
-        description: 'SQLインジェクションの可能性があります',
-        suggestion: 'パラメータ化クエリを使用してください',
+        description: 'SQL 인젝션 가능성이 있습니다',
+        suggestion: '매개변수화된 쿼리를 사용해 주세요',
       })
     }
 
@@ -273,11 +273,11 @@ class Claude4BestPracticesEvaluator {
     const score = Math.max(0, 100 - criticalCount * 40 - majorCount * 20)
 
     if (score < 70) {
-      recommendations.push('セキュリティ監査の実施を強く推奨します')
+      recommendations.push('보안 감사 실시를 강력히 추천합니다')
     }
     if (criticalCount > 0) {
       recommendations.push(
-        'クリティカルなセキュリティ問題を即座に修正してください'
+        '중대한 보안 문제를 즉시 수정해 주세요'
       )
     }
 
@@ -288,8 +288,8 @@ class Claude4BestPracticesEvaluator {
       issues,
       recommendations,
       bestPracticeReferences: [
-        'セキュリティベストプラクティス',
-        'セキュアコーディング原則',
+        '보안 베스트 프랙티스',
+        '보안 코딩 원칙',
       ],
     }
   }
@@ -313,9 +313,9 @@ class Claude4BestPracticesEvaluator {
         ) {
           issues.push({
             severity: 'minor',
-            description: `クラス ${className} が複数の責任を持っている可能性があります`,
+            description: `클래스 ${className} 가 여러 책임을 가지고 있을 가능성이 있습니다`,
             suggestion:
-              '単一責任原則に従ってクラスを分割することを検討してください',
+              '단일 책임 원칙에 따라 클래스를 분할하는 것을 검토해 주세요',
           })
         }
       })
@@ -329,16 +329,16 @@ class Claude4BestPracticesEvaluator {
     ) {
       issues.push({
         severity: 'minor',
-        description: '拡張に対して閉じている可能性があります',
+        description: '확장에 대해 폐쇄되어 있을 가능성이 있습니다',
         suggestion:
-          'ポリモーフィズムやStrategy パターンの使用を検討してください',
+          '다형성이나 Strategy 패턴 사용을 검토해 주세요',
       })
     }
 
     const score = Math.max(0, 100 - issues.length * 15)
 
     if (score < 80) {
-      recommendations.push('SOLID原則の適用を検討してください')
+      recommendations.push('SOLID 원칙의 적용을 검토해 주세요')
     }
 
     return {
@@ -347,7 +347,7 @@ class Claude4BestPracticesEvaluator {
       score,
       issues,
       recommendations,
-      bestPracticeReferences: ['SOLID設計原則', 'オブジェクト指向設計パターン'],
+      bestPracticeReferences: ['SOLID 설계 원칙', '객체 지향 설계 패턴'],
     }
   }
 
@@ -362,8 +362,8 @@ class Claude4BestPracticesEvaluator {
     if (content.includes('n+1') || content.includes('nested loop')) {
       issues.push({
         severity: 'major',
-        description: 'パフォーマンスの問題が検出されました',
-        suggestion: 'アルゴリズムの最適化やキャッシュの使用を検討してください',
+        description: '성능 문제가 감지되었습니다',
+        suggestion: '알고리즘 최적화나 캐시 사용을 검토해 주세요',
       })
     }
 
@@ -371,15 +371,15 @@ class Claude4BestPracticesEvaluator {
     if (content.length > 10000) {
       issues.push({
         severity: 'minor',
-        description: 'ファイルサイズが大きすぎます',
-        suggestion: 'ファイルの分割やモジュール化を検討してください',
+        description: '파일 크기가 너무 큽니다',
+        suggestion: '파일의 분할이나 모듈화를 검토해 주세요',
       })
     }
 
     const score = Math.max(0, 100 - issues.length * 10)
 
     if (score < 85) {
-      recommendations.push('パフォーマンス最適化の機会があります')
+      recommendations.push('성능 최적화의 기회가 있습니다')
     }
 
     return {
@@ -388,17 +388,17 @@ class Claude4BestPracticesEvaluator {
       score,
       issues,
       recommendations,
-      bestPracticeReferences: ['パフォーマンス最適化手法'],
+      bestPracticeReferences: ['성능 최적화 기법'],
     }
   }
 }
 ```
 
-### 3. Japanese Review Report Generator
+### 3. Korean Review Report Generator
 
 ```typescript
-// Comprehensive Japanese review report generator
-class JapaneseReviewReportGenerator {
+// Comprehensive Korean review report generator
+class KoreanReviewReportGenerator {
   async generateReport(
     filePath: string,
     evaluationResults: EvaluationResult[],
@@ -416,63 +416,63 @@ class JapaneseReviewReportGenerator {
     const overallScore = this.calculateOverallScore(evaluationResults)
     const qualityRating = this.getQualityRating(overallScore)
 
-    return `# Claude 4 ベストプラクティス レビューレポート
+    return `# Claude 4 베스트 프랙티스 리뷰 리포트
 
-## 基本情報
+## 기본 정보
 
-- **ファイル**: ${filePath}
-- **レビュー日時**: ${timestamp}
-- **総合スコア**: ${overallScore}/100 (${qualityRating})
-- **レビュー基準**: Claude 4 ベストプラクティス（ローカル評価）
+- **파일**: ${filePath}
+- **리뷰 일시**: ${timestamp}
+- **종합 점수**: ${overallScore}/100 (${qualityRating})
+- **리뷰 기준**: Claude 4 베스트 프랙티스(로컬 평가)
 
-## 評価サマリー
+## 평가 요약
 
 ${this.generateScoreSummary(evaluationResults)}
 
-## 詳細評価
+## 상세 평가
 
 ${evaluationResults.map(result => this.generateDetailedEvaluation(result)).join('\n\n')}
 
-## 総合的な改善提案
+## 종합적인 개선 제안
 
-### 即座に対応すべき項目 (高優先度)
+### 즉시 대응해야 할 항목 (고우선도)
 
 ${this.getHighPriorityRecommendations(evaluationResults)}
 
-### 改善を検討すべき項目 (中優先度)
+### 개선을 검토해야 할 항목 (중우선도)
 
 ${this.getMediumPriorityRecommendations(evaluationResults)}
 
-### 最適化の機会 (低優先度)
+### 최적화의 기회 (저우선도)
 
 ${this.getLowPriorityRecommendations(evaluationResults)}
 
-## Claude 4 ベストプラクティス適用度
+## Claude 4 베스트 프랙티스 적용도
 
-### AIレビューファースト設計への適合性
+### AI 리뷰 퍼스트 설계에의 적합성
 
 ${this.evaluateAIReviewFirstCompliance(originalContent)}
 
-### プロンプトエンジニアリング原則への準拠
+### 프롬프트 엔지니어링 원칙에의 준수
 
 ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
-## 参考資料
+## 참고 자료
 
-- Claude 4 ベストプラクティス（ローカル評価基準）
-- AIレビューファースト設計手法
-- セキュリティ・SOLID原則・パフォーマンス評価フレームワーク
+- Claude 4 베스트 프랙티스(로컬 평가 기준)
+- AI 리뷰 퍼스트 설계 기법
+- 보안·SOLID 원칙·성능 평가 프레임워크
 
-## レビューアー情報
+## 리뷰어 정보
 
-- **レビュアー**: Claude Code AI Review System
-- **バージョン**: Claude 4 Best Practices v1.0
-- **レビュー方法**: 自動化されたAIレビューファースト手法
+- **리뷰어**: Claude Code AI Review System
+- **버전**: Claude 4 Best Practices v1.0
+- **리뷰 방법**: 자동화된 AI 리뷰 퍼스트 기법
 
 ---
 
-*このレポートはClaude 4ベストプラクティスに基づいて自動生成されました。*
-*詳細な改善案については、人間による最終検証を推奨します。*`
+*이 리포트는 Claude 4 베스트 프랙티스에 기반하여 자동 생성되었습니다.*
+*상세한 개선안에 대해서는 사람에 의한 최종 검증을 추천합니다.*`
   }
 
   private calculateOverallScore(results: EvaluationResult[]): number {
@@ -490,26 +490,26 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
   }
 
   private getQualityRating(score: number): string {
-    if (score >= 90) return '優秀'
-    if (score >= 80) return '良好'
-    if (score >= 70) return '普通'
-    if (score >= 60) return '要改善'
-    return '要大幅改善'
+    if (score >= 90) return '우수'
+    if (score >= 80) return '양호'
+    if (score >= 70) return '보통'
+    if (score >= 60) return '개선 필요'
+    return '대폭 개선 필요'
   }
 
   private generateScoreSummary(results: EvaluationResult[]): string {
     return results
       .map(result => {
         const categoryName = {
-          security: 'セキュリティ',
-          solid: 'SOLID原則',
-          performance: 'パフォーマンス',
+          security: '보안',
+          solid: 'SOLID 원칙',
+          performance: '성능',
         }[result.category]
 
         const priorityName = {
-          high: '高優先度',
-          medium: '中優先度',
-          low: '低優先度',
+          high: '고우선도',
+          medium: '중우선도',
+          low: '저우선도',
         }[result.priority]
 
         return `- **${categoryName}** (${priorityName}): ${result.score}/100`
@@ -519,16 +519,16 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
   private generateDetailedEvaluation(result: EvaluationResult): string {
     const categoryName = {
-      security: 'セキュリティ脆弱性評価',
-      solid: 'SOLID原則評価',
-      performance: 'パフォーマンス評価',
+      security: '보안 취약점 평가',
+      solid: 'SOLID 원칙 평가',
+      performance: '성능 평가',
     }[result.category]
 
     let report = `### ${categoryName}\n\n`
-    report += `**スコア**: ${result.score}/100\n\n`
+    report += `**점수**: ${result.score}/100\n\n`
 
     if (result.issues.length > 0) {
-      report += `**検出された問題**:\n\n`
+      report += `**감지된 문제**:\n\n`
       result.issues.forEach((issue, index) => {
         const severityEmoji = {
           critical: '🔴',
@@ -537,18 +537,18 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
         }[issue.severity]
 
         report += `${index + 1}. ${severityEmoji} **${issue.description}**\n`
-        report += `   - 改善提案: ${issue.suggestion}\n`
+        report += `   - 개선 제안: ${issue.suggestion}\n`
         if (issue.location) {
-          report += `   - 場所: ${issue.location}\n`
+          report += `   - 위치: ${issue.location}\n`
         }
         report += '\n'
       })
     } else {
-      report += `✅ この分野では問題は検出されませんでした。\n\n`
+      report += `✅ 이 분야에서는 문제가 감지되지 않았습니다.\n\n`
     }
 
     if (result.recommendations.length > 0) {
-      report += `**推奨事項**:\n\n`
+      report += `**추천 사항**:\n\n`
       result.recommendations.forEach((rec, index) => {
         report += `${index + 1}. ${rec}\n`
       })
@@ -566,7 +566,7 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
     return highPriorityItems.length > 0
       ? highPriorityItems.join('\n')
-      : '- 高優先度の問題は検出されませんでした。'
+      : '- 고우선도 문제가 감지되지 않았습니다.'
   }
 
   private getMediumPriorityRecommendations(
@@ -579,7 +579,7 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
     return mediumPriorityItems.length > 0
       ? mediumPriorityItems.join('\n')
-      : '- 中優先度の改善項目はありません。'
+      : '- 중우선도 개선 항목이 없습니다.'
   }
 
   private getLowPriorityRecommendations(results: EvaluationResult[]): string {
@@ -590,27 +590,27 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
     return lowPriorityItems.length > 0
       ? lowPriorityItems.join('\n')
-      : '- 低優先度の最適化機会はありません。'
+      : '- 저우선도 최적화 기회가 없습니다.'
   }
 
   private evaluateAIReviewFirstCompliance(content: string): string {
     const patterns = [
-      { pattern: /小さなドラフト|draft/gi, point: '最小実装の概念' },
-      { pattern: /レビュー|review/gi, point: 'レビューサイクルの実装' },
-      { pattern: /反復|iteration/gi, point: '反復的改善プロセス' },
+      { pattern: /작은 초안|소규모 초안|draft/gi, point: '최소 구현의 개념' },
+      { pattern: /리뷰|review/gi, point: '리뷰 사이클의 구현' },
+      { pattern: /반복|반복적|iteration/gi, point: '반복적 개선 프로세스' },
       {
-        pattern: /セキュリティ|security/gi,
-        point: 'セキュリティ優先のアプローチ',
+        pattern: /보안|시큐리티|security/gi,
+        point: '보안 우선 접근법',
       },
     ]
 
     const foundPatterns = patterns.filter(p => content.match(p.pattern))
     const score = (foundPatterns.length / patterns.length) * 100
 
-    let compliance = `**適合度**: ${Math.round(score)}%\n\n`
+    let compliance = `**적합도**: ${Math.round(score)}%\n\n`
 
     if (foundPatterns.length > 0) {
-      compliance += `**確認されたベストプラクティス**:\n`
+      compliance += `**확인된 베스트 프랙티스**:\n`
       foundPatterns.forEach(p => {
         compliance += `- ✅ ${p.point}\n`
       })
@@ -618,7 +618,7 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
     const missingPatterns = patterns.filter(p => !content.match(p.pattern))
     if (missingPatterns.length > 0) {
-      compliance += `\n**改善の余地**:\n`
+      compliance += `\n**개선의 여지**:\n`
       missingPatterns.forEach(p => {
         compliance += `- ❌ ${p.point}\n`
       })
@@ -630,21 +630,21 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
   private evaluatePromptEngineeringCompliance(content: string): string {
     const principles = [
       {
-        pattern: /明確.*指示|clear.*instruction/gi,
-        point: '明確で具体的な指示',
+        pattern: /명확.*지시|명확한.*지시|clear.*instruction/gi,
+        point: '명확하고 구체적인 지시',
       },
-      { pattern: /構造化|structured/gi, point: '構造化されたフォーマット' },
-      { pattern: /コンテキスト|context/gi, point: 'コンテキストの提供' },
-      { pattern: /例|example/gi, point: '実例の活用' },
+      { pattern: /구조화|체계적|structured/gi, point: '구조화된 포맷' },
+      { pattern: /컴텍스트|맥락|context/gi, point: '컴텍스트의 제공' },
+      { pattern: /예시|예제|example/gi, point: '실예의 활용' },
     ]
 
     const foundPrinciples = principles.filter(p => content.match(p.pattern))
     const score = (foundPrinciples.length / principles.length) * 100
 
-    let compliance = `**準拠度**: ${Math.round(score)}%\n\n`
+    let compliance = `**준수도**: ${Math.round(score)}%\n\n`
 
     if (foundPrinciples.length > 0) {
-      compliance += `**確認された原則**:\n`
+      compliance += `**확인된 원칙**:\n`
       foundPrinciples.forEach(p => {
         compliance += `- ✅ ${p.point}\n`
       })
@@ -652,7 +652,7 @@ ${this.evaluatePromptEngineeringCompliance(originalContent)}
 
     const missingPrinciples = principles.filter(p => !content.match(p.pattern))
     if (missingPrinciples.length > 0) {
-      compliance += `\n**強化すべき原則**:\n`
+      compliance += `\n**강화해야 할 원칙**:\n`
       missingPrinciples.forEach(p => {
         compliance += `- ❌ ${p.point}\n`
       })
@@ -671,32 +671,32 @@ class PromptReviewCommand {
   constructor(
     private fileValidator: FileValidator,
     private evaluator: Claude4BestPracticesEvaluator,
-    private reportGenerator: JapaneseReviewReportGenerator
+    private reportGenerator: KoreanReviewReportGenerator
   ) {}
 
   async execute(filePath?: string): Promise<string> {
     // Enhanced argument validation - exit early if no file path provided
     if (!filePath || filePath.trim() === '') {
-      console.log('\x1b[31m⏺ ファイルパスを引数として提供してください\x1b[0m')
-      console.log('使用例: /prompt-review ./path/to/file.md')
+      console.log('\x1b[31m⏺ 파일 경로를 인수로 제공해 주세요\x1b[0m')
+      console.log('사용예: /prompt-review ./path/to/file.md')
       process.exit(0)
     }
 
     try {
       // Phase 1: Secure file processing
-      console.log(`📖 ファイルを読み込み中: ${filePath}`)
+      console.log(`📖 파일을 읽는 중: ${filePath}`)
       const { content, extension } =
         await this.fileValidator.validateAndRead(filePath)
 
       // Phase 2: Claude 4 best practices evaluation
-      console.log('🔍 Claude 4ベストプラクティスに基づく評価を実行中...')
+      console.log('🔍 Claude 4 베스트 프랙티스에 기반한 평가를 실행 중...')
       const evaluationResults = await this.evaluator.evaluateContent(
         content,
         extension
       )
 
-      // Phase 3: Generate Japanese review report
-      console.log('📝 日本語レビューレポートを生成中...')
+      // Phase 3: Generate Korean review report
+      console.log('📝 한국어 리뷰 리포트를 생성 중...')
       const reviewReport = await this.reportGenerator.generateReport(
         filePath,
         evaluationResults,
@@ -712,8 +712,8 @@ class PromptReviewCommand {
 
       // Phase 5: Display summary
       const overallScore = this.calculateOverallScore(evaluationResults)
-      console.log(`✅ レビュー完了: ${reviewFilePath}`)
-      console.log(`📊 総合スコア: ${overallScore}/100`)
+      console.log(`✅ 리뷰 완료: ${reviewFilePath}`)
+      console.log(`📊 종합 점수: ${overallScore}/100`)
 
       return reviewFilePath
     } catch (error) {
@@ -736,7 +736,7 @@ class PromptReviewCommand {
 
     // Write review file
     await writeFile(reviewFilePath, reviewContent, { encoding: 'utf8' })
-    console.log(`📁 レビューファイルを作成: ${reviewFilePath}`)
+    console.log(`📁 리뷰 파일을 생성: ${reviewFilePath}`)
 
     return reviewFilePath
   }
@@ -763,7 +763,7 @@ class PromptReviewCommand {
     } else if (error.name === 'ValidationError') {
       console.error('⚠️ 入力検証に失敗しました')
     } else {
-      console.error('💥 予期しないエラーが発生しました')
+      console.error('💥 예상치 못한 오류가 발생했습니다')
     }
   }
 }
@@ -793,12 +793,12 @@ class PromptReviewCommand {
 ```bash
 /prompt-review ./docs/CLAUDE_4_BEST_PRACTICES.md
 
-📖 ファイルを読み込み中: ./docs/CLAUDE_4_BEST_PRACTICES.md
-🔍 Claude 4ベストプラクティスに基づく評価を実行中...
-📝 日本語レビューレポートを生成中...
-📁 レビューファイルを作成: ./docs/CLAUDE_4_BEST_PRACTICES.review.md
-✅ レビュー完了: ./docs/CLAUDE_4_BEST_PRACTICES.review.md
-📊 総合スコア: 85/100
+📖 파일을 읽는 중: ./docs/CLAUDE_4_BEST_PRACTICES.md
+🔍 Claude 4 베스트 프랙티스에 기반한 평가를 실행 중...
+📝 한국어 리뷰 리포트를 생성 중...
+📁 리뷰 파일을 생성: ./docs/CLAUDE_4_BEST_PRACTICES.review.md
+✅ 리뷰 완료: ./docs/CLAUDE_4_BEST_PRACTICES.review.md
+📊 종합 점수: 85/100
 ```
 
 ### Code File Review
@@ -806,12 +806,12 @@ class PromptReviewCommand {
 ```bash
 /prompt-review ./app/lib/main.dart
 
-📖 ファイルを読み込み中: ./app/lib/main.dart
-🔍 Claude 4ベストプラクティスに基づく評価を実行中...
-📝 日本語レビューレポートを生成中...
-📁 レビューファイルを作成: ./app/lib/main.review.dart
-✅ レビュー完了: ./app/lib/main.review.dart
-📊 総合スコア: 78/100
+📖 파일을 읽는 중: ./app/lib/main.dart
+🔍 Claude 4 베스트 프랙티스에 기반한 평가를 실행 중...
+📝 한국어 리뷰 리포트를 생성 중...
+📁 리뷰 파일을 생성: ./app/lib/main.review.dart
+✅ 리뷰 완료: ./app/lib/main.review.dart
+📊 종합 점수: 78/100
 ```
 
 ### No Arguments Example
@@ -819,7 +819,7 @@ class PromptReviewCommand {
 ```bash
 /prompt-review
 
-⏺ ファイルパスを引数として提供してください
+⏺ 파일 경로를 인수로 제공해 주세요
 使用例: /prompt-review ./path/to/file.md
 ```
 
@@ -829,7 +829,7 @@ class PromptReviewCommand {
 
 ```bash
 /prompt-review nonexistent.md
-❌ エラー: ファイル 'nonexistent.md' が見つかりません
+❌ 오류: 파일 'nonexistent.md'를 찾을 수 없습니다
 💡 正しいファイルパスを使用してください
 ```
 
@@ -837,7 +837,7 @@ class PromptReviewCommand {
 
 ```bash
 /prompt-review file.exe
-❌ エラー: サポートされていないファイル拡張子: .exe
+❌ 오류: 지원되지 않는 파일 확장자: .exe
 💡 サポートされている拡張子: .md, .txt, .js, .ts, .dart, .py, .java, .json, .yaml, .yml
 ```
 
@@ -882,7 +882,7 @@ class PromptReviewCommand {
 export WORK_DIRECTORY="."
 export MAX_FILE_SIZE_MB=50
 export SUPPORTED_EXTENSIONS=".md,.txt,.js,.ts,.dart,.py,.java,.json,.yaml,.yml"
-export REVIEW_LANGUAGE="japanese"
+export REVIEW_LANGUAGE="korean"
 export ENABLE_SECURITY_CHECKS=true
 ```
 
@@ -900,4 +900,4 @@ project-root/
 
 ---
 
-**Note**: This enhanced command provides comprehensive evaluation based on Claude 4 best practices with secure file handling, multi-perspective analysis, and detailed Japanese reporting.
+**Note**: This enhanced command provides comprehensive evaluation based on Claude 4 best practices with secure file handling, multi-perspective analysis, and detailed Korean reporting.
