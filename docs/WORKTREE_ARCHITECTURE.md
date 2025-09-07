@@ -1,107 +1,107 @@
-# Claude Code Git Worktree アーキテクチャ設計書
+# Claude Code Git Worktree 아키텍처 설계서
 
-## 文書概要
+## 문서 개요
 
-本文書では、Claude CodeとGitHub Issueを統合したFlutter並行開発システムにおける、git worktreeアーキテクチャの設計思想と実装詳細を解説します。
+본 문서에서는 Claude Code와 GitHub Issue를 통합한 Flutter 병렬 개발 시스템에서의 git worktree 아키텍처 설계 사상과 구현 세부사항을 설명합니다.
 
-### 設計目標
+### 설계 목표
 
-- **並行開発の実現**: 複数のGitHub Issueを同時並行で安全に開発
-- **環境独立性の確保**: タスク間での干渉・競合状態の完全排除
-- **開発効率の最大化**: 統一されたツールチェーンによる開発体験の向上
-- **保守性の担保**: 明確なディレクトリ構造による管理コストの削減
+- **병렬 개발 구현**: 복수의 GitHub Issue를 동시 병렬로 안전하게 개발
+- **환경 독립성 확보**: 태스크 간 간섭·경합 상태의 완전 배제
+- **개발 효율성 최대화**: 통일된 툴체인을 통한 개발 경험 향상
+- **유지보수성 확보**: 명확한 디렉토리 구조를 통한 관리 비용 절감
 
-### アーキテクチャ方針
+### 아키텍처 방침
 
-`.claude-workspaces`ディレクトリをプロジェクトルートに配置することで、Git内部構造との分離、IDE認識の最適化、管理スクリプトの簡素化を実現します。各GitHub Issueは独立したワークスペースを持ち、mise による統一されたタスク実行環境で動作します。
+`.claude-workspaces` 디렉토리를 프로젝트 루트에 배치함으로써 Git 내부 구조와의 분리, IDE 인식 최적화, 관리 스크립트의 간소화를 구현합니다. 각 GitHub Issue는 독립된 워크스페이스를 가지며, mise를 통한 통일된 태스크 실행 환경에서 동작합니다.
 
-## 目次
+## 목차
 
-1. [現在の配置方針](#現在の配置方針)
-2. [.gitディレクトリ直下への配置が問題となる理由](#gitディレクトリ直下への配置が問題となる理由)
-3. [ルートディレクトリ配置の利点](#ルートディレクトリ配置の利点)
-4. [技術的考慮事項](#技術的考慮事項)
-5. [代替案との比較](#代替案との比較)
-6. [まとめ](#まとめ)
+1. [현재의 배치 방침](#현재의-배치-방침)
+2. [.git 디렉토리 직하 배치가 문제가 되는 이유](#git-디렉토리-직하-배치가-문제가-되는-이유)
+3. [루트 디렉토리 배치의 장점](#루트-디렉토리-배치의-장점)
+4. [기술적 고려사항](#기술적-고려사항)
+5. [대안과의 비교](#대안과의-비교)
+6. [정리](#정리)
 
-## 現在の配置方針
+## 현재의 배치 방침
 
-### ディレクトリ構造
+### 디렉토리 구조
 
 ```bash
 flutter_template_project/
-├── .claude-workspaces/          # ✅ ルート直下に配置（推奨）
-│   ├── FEAT-123/                # タスク1の独立作業ディレクトリ
-│   ├── UI-456/                  # タスク2の独立作業ディレクトリ
-│   └── BUG-789/                 # タスク3の独立作業ディレクトリ
-├── .git/                        # Git内部管理用
-│   ├── worktrees/              # ⚠️ Gitの内部管理用（既存）
+├── .claude-workspaces/          # ✅ 루트 직하에 배치 (권장)
+│   ├── FEAT-123/                # 태스크1의 독립 작업 디렉토리
+│   ├── UI-456/                  # 태스크2의 독립 작업 디렉토리
+│   └── BUG-789/                 # 태스크3의 독립 작업 디렉토리
+├── .git/                        # Git 내부 관리용
+│   ├── worktrees/              # ⚠️ Git의 내부 관리용 (기존)
 │   ├── refs/
 │   ├── objects/
 │   └── config
-├── .vscode/                     # VS Code設定
+├── .vscode/                     # VS Code 설정
 │   └── settings.json
-├── app/                         # メインFlutterアプリケーション
-│   ├── lib/                     # Dartソースコード
-│   │   ├── pages/              # UI ページ
-│   │   ├── router/             # go_router設定
-│   │   └── i18n/               # slang生成多言語ファイル
-│   ├── assets/i18n/            # JSON翻訳ファイル
-│   ├── test/                   # ウィジェットテスト
-│   └── [platform]/             # プラットフォーム固有ファイル
-├── packages/                    # 共有パッケージ（現在空）
-├── docs/                        # プロジェクトドキュメント
+├── app/                         # 메인 Flutter 애플리케이션
+│   ├── lib/                     # Dart 소스코드
+│   │   ├── pages/              # UI 페이지
+│   │   ├── router/             # go_router 설정
+│   │   └── i18n/               # slang 생성 다국어 파일
+│   ├── assets/i18n/            # JSON 번역 파일
+│   ├── test/                   # 위젯 테스트
+│   └── [platform]/             # 플랫폼 고유 파일
+├── packages/                    # 공유 패키지 (현재 공백)
+├── docs/                        # 프로젝트 문서
 │   ├── CLAUDE_4_BEST_PRACTICES.md
 │   ├── COMMITLINT_RULES.md
 │   └── WORKTREE_ARCHITECTURE.md
-├── scripts/                     # ビルド・ユーティリティスクリプト
-├── pubspec.yaml                 # ワークスペース設定
-├── package.json                 # Node.js依存関係
-└── LICENSE                      # MITライセンス
+├── scripts/                     # 빌드·유틸리티 스크립트
+├── pubspec.yaml                 # 워크스페이스 설정
+├── package.json                 # Node.js 의존성
+└── LICENSE                      # MIT 라이센스
 ```
 
-### Git Worktreeアーキテクチャ概要
+### Git Worktree 아키텍처 개요
 
 ```mermaid
 flowchart TB
-    subgraph "プロジェクトルート"
-        MainRepo["🗂️ flutter_template_project<br/>(メインリポジトリ)"]
+    subgraph "프로젝트 루트"
+        MainRepo["🗂️ flutter_template_project<br/>(메인 리포지토리)"]
 
-        subgraph "作業ディレクトリ"
+        subgraph "작업 디렉토리"
             CW[".claude-workspaces/"]
-            CW --> W1["FEAT-123/<br/>🔧 新機能開発"]
-            CW --> W2["UI-456/<br/>🎨 UI改善"]
-            CW --> W3["BUG-789/<br/>🐛 バグ修正"]
+            CW --> W1["FEAT-123/<br/>🔧 새 기능 개발"]
+            CW --> W2["UI-456/<br/>🎨 UI 개선"]
+            CW --> W3["BUG-789/<br/>🐛 버그 수정"]
         end
 
-        subgraph "Git内部管理"
+        subgraph "Git 내부 관리"
             GitDir[".git/"]
-            GitDir --> GM["worktrees/<br/>📝 メタデータ管理"]
+            GitDir --> GM["worktrees/<br/>📝 메타데이터 관리"]
         end
 
-        subgraph "共有リソース"
-            App["app/<br/>📱 メインアプリ"]
-            Pkg["packages/<br/>📦 共有パッケージ"]
-            Docs["docs/<br/>📚 ドキュメント"]
-            Claude[".claude/<br/>⚙️ Claude設定"]
+        subgraph "공유 리소스"
+            App["app/<br/>📱 메인 앱"]
+            Pkg["packages/<br/>📦 공유 패키지"]
+            Docs["docs/<br/>📚 문서"]
+            Claude[".claude/<br/>⚙️ Claude 설정"]
         end
     end
 
-    W1 -.->|参照| App
-    W1 -.->|参照| Pkg
-    W1 -.->|参照| Claude
+    W1 -.->|참조| App
+    W1 -.->|참조| Pkg
+    W1 -.->|참조| Claude
 
-    W2 -.->|参照| App
-    W2 -.->|参照| Pkg
-    W2 -.->|参照| Claude
+    W2 -.->|참조| App
+    W2 -.->|참조| Pkg
+    W2 -.->|참조| Claude
 
-    W3 -.->|参照| App
-    W3 -.->|参照| Pkg
-    W3 -.->|参照| Claude
+    W3 -.->|참조| App
+    W3 -.->|참조| Pkg
+    W3 -.->|참조| Claude
 
-    GM -.->|管理| W1
-    GM -.->|管理| W2
-    GM -.->|管理| W3
+    GM -.->|관리| W1
+    GM -.->|관리| W2
+    GM -.->|관리| W3
 
     classDef workspace fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
     classDef shared fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
@@ -707,4 +707,4 @@ gh issue comment [NUMBER] --body "実装完了"  # Issue進捗更新
 - [Claude 4 ベストプラクティス](CLAUDE_4_BEST_PRACTICES.md)
 - [コミットルール](COMMITLINT_RULES.md)
 - [プロジェクト設定](../CLAUDE.md)
-- [README（日本語）](../README.md)
+- [README(한국어)](../README.md)

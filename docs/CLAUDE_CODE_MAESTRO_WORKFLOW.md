@@ -1,72 +1,72 @@
-# Claude Code × Maestro UIテストワークフロー
+# Claude Code × Maestro UI테스트 워크플로우
 
-本ドキュメントでは、Claude CodeとMaestroを組み合わせたFlutter UIテストの包括的なワークフローについて説明します。このアプローチは、反復的なUI開発プロセスを効率化し、高品質なモバイルアプリケーションの開発を支援します。
+본 문서에서는 Claude Code와 Maestro를 결합한 Flutter UI테스트의 종합적인 워크플로우에 대해 설명합니다. 이 접근법은 반복적인 UI 개발 프로세스를 효율화하고, 고품질 모바일 애플리케이션 개발을 지원합니다.
 
-## 概要
+## 개요
 
-### ワークフローの特徴
+### 워크플로우의 특징
 
-- **AI駆動の反復開発**: Claude Codeが失敗を分析し、改善策を提案
-- **失敗前提の設計**: テスト失敗を学習の機会として活用
-- **自動化されたデバッグ**: スクリーンショットとログによる視覚的問題分析
-- **環境変数の動的管理**: flavorに応じた柔軟なテスト実行
+- **AI 주도의 반복 개발**: Claude Code가 실패를 분석하고 개선책을 제안
+- **실패 전제의 설계**: 테스트 실패를 학습의 기회로 활용
+- **자동화된 디버깅**: 스크린샷과 로그를 통한 시각적 문제 분석
+- **환경변수의 동적 관리**: flavor에 따른 유연한 테스트 실행
 
-### 技術スタック
+### 기술 스택
 
 ```mermaid
 graph TD
     A[Claude Code] --> B[execute.sh]
     B --> C[Maestro]
     C --> D[Flutter App]
-    B --> E[環境変数管理]
+    B --> E[환경변수 관리]
     E --> F[dart_define/*.json]
-    C --> G[テスト結果]
-    G --> H[スクリーンショット]
-    G --> I[ログファイル]
+    C --> G[테스트 결과]
+    G --> H[스크린샷]
+    G --> I[로그 파일]
     H --> A
     I --> A
 ```
 
-## 基本ワークフロー
+## 기본 워크플로우
 
-### フェーズ1: 要件分析とテスト設計
+### 페이즈1: 요구사항 분석과 테스트 설계
 
-#### Claude Codeによる要件理解
+#### Claude Code에 의한 요구사항 이해
 
 ```
-ユーザー: "カウンターアプリのインクリメント機能をテストしたい"
+사용자: "카운터 앱의 증가 기능을 테스트하고 싶습니다"
 
-Claude Code分析項目:
-1. 必要なUI要素の特定
-2. 期待される動作の理解
-3. テスト観点の洗い出し
-4. 既存テストとの関連性確認
+Claude Code 분석 항목:
+1. 필요한 UI 요소의 식별
+2. 기대되는 동작의 이해
+3. 테스트 관점의 도출
+4. 기존 테스트와의 관련성 확인
 ```
 
-#### テスト設計原則
+#### 테스트 설계 원칙
 
-1. **単一責任**: 1つのテストで1つの機能をテスト
-2. **環境非依存**: `${FULL_APP_ID}`などの動的変数を使用
-3. **可読性重視**: 分かりやすいアサーションとステップ名
-4. **保守性**: 将来の変更に対応できる構造
+1. **단일 책임**: 1개의 테스트로 1개의 기능을 테스트
+2. **환경 비의존**: `${FULL_APP_ID}` 등의 동적 변수를 사용
+3. **가독성 중시**: 이해하기 쉬운 어설션과 단계명
+4. **유지보수성**: 향후 변경에 대응할 수 있는 구조
 
-### フェーズ2: テスト実装
+### 페이즈2: 테스트 구현
 
-#### 現代的なMaestroテストテンプレート
+#### 현대적인 Maestro 테스트 템플릿
 
 ```yaml
-# 基本テンプレート
+# 기본 템플릿
 appId: ${FULL_APP_ID}
 ---
 - launchApp
 - waitForAnimationToEnd
-- assertVisible: '期待するUI要素'
+- assertVisible: '기대하는 UI 요소'
 - tapOn:
-    text: 'ボタンテキスト'
-- assertVisible: '結果状態'
+    text: '버튼 텍스트'
+- assertVisible: '결과 상태'
 ```
 
-#### 実践例：カウンターアプリテスト
+#### 실습 예: 카운터 앱 테스트
 
 ```yaml
 # counter_test.yaml
@@ -74,31 +74,31 @@ appId: ${FULL_APP_ID}
 ---
 - launchApp
 - assertVisible: 'Flutter Demo Home Page'
-- assertVisible: 'カウンター: 0'
+- assertVisible: '카운터: 0'
 - tapOn:
     text: 'Increment'
-- assertVisible: 'カウンター: 1'
+- assertVisible: '카운터: 1'
 - tapOn:
     text: 'Increment'
-- assertVisible: 'カウンター: 2'
+- assertVisible: '카운터: 2'
 ```
 
-### フェーズ3: テスト実行とデバッグ
+### 페이즈3: 테스트 실행과 디버깅
 
-#### execute.shによる実行
+#### execute.sh를 통한 실행
 
 ```bash
-# 基本実行
+# 기본 실행
 ./execute.sh counter_test.yaml
 
-# デバッグモード
+# 디버그 모드
 ./execute.sh --verbose --debug counter_test.yaml
 
-# ウォッチモード（開発中）
+# 워치 모드 (개발 중)
 ./execute.sh --watch counter_test.yaml
 ```
 
-#### 出力例と解釈
+#### 출력 예와 해석
 
 ```
 ===== MAESTRO UI TEST RUNNER =====
@@ -110,39 +110,39 @@ appId: ${FULL_APP_ID}
 [INFO] Test artifacts will be saved to: test-output/20240703-123456
 ```
 
-### フェーズ4: 失敗分析と改善
+### 페이즈4: 실패 분석과 개선
 
-#### Claude Codeによる失敗分析プロセス
+#### Claude Code에 의한 실패 분석 프로세스
 
-**1. ログ分析**
+**1. 로그 분석**
 
 ```bash
-# 最新のテスト出力を確認
-cat test-output/[最新タイムスタンプ]/maestro-output.log
+# 최신 테스트 출력 확인
+cat test-output/[최신 타임스탬프]/maestro-output.log
 ```
 
-**2. スクリーンショット分析**
+**2. 스크린샷 분석**
 
 ```
-Maestroが自動生成するスクリーンショットを確認
-場所: ~/.maestro/tests/[テスト実行ID]/
+Maestro가 자동 생성하는 스크린샷 확인
+위치: ~/.maestro/tests/[테스트 실행ID]/
 ```
 
-**3. 一般的な失敗パターン**
+**3. 일반적인 실패 패턴**
 
-| 失敗タイプ         | 症状                | Claude Code対応                                  |
+| 실패 타입         | 증상                | Claude Code 대응                                  |
 | ------------------ | ------------------- | ------------------------------------------------ |
-| 要素が見つからない | `Element not found` | UI要素のIDやテキストを確認、適切なセレクタに修正 |
-| アプリ起動失敗     | `App launch failed` | FULL_APP_IDの確認、デバイス接続状態チェック      |
-| タイムアウト       | `Timeout`           | 待機時間の調整、明示的な待機条件追加             |
-| アニメーション干渉 | UI要素の状態不整合  | `waitForAnimationToEnd`の追加                    |
+| 요소를 찾을 수 없음 | `Element not found` | UI 요소의 ID나 텍스트 확인, 적절한 선택자로 수정 |
+| 앱 시작 실패     | `App launch failed` | FULL_APP_ID 확인, 디바이스 연결 상태 점검      |
+| 타임아웃       | `Timeout`           | 대기 시간 조정, 명시적 대기 조건 추가             |
+| 애니메이션 간섭 | UI 요소 상태 불일치  | `waitForAnimationToEnd` 추가                    |
 
-### フェーズ5: 継続的改善
+### 페이즈5: 지속적 개선
 
-#### ウォッチモードでの反復開発
+#### 워치 모드에서의 반복 개발
 
 ```bash
-# ファイル変更を監視して自動再実行
+# 파일 변경을 모니터링하여 자동 재실행
 ./execute.sh --watch counter_test.yaml
 ```
 
@@ -150,17 +150,17 @@ Maestroが自動生成するスクリーンショットを確認
 [INFO] Monitoring file changes for: counter_test.yaml
 [INFO] Press Ctrl+C to exit watch mode
 
-# ファイル保存時
+# 파일 저장 시
 [INFO] File changed, running test...
-[実行結果]
+[실행 결과]
 [INFO] Waiting for file changes...
 ```
 
-## 環境変数管理システム
+## 환경변수 관리 시스템
 
-### 動的変数生成の仕組み
+### 동적 변수 생성의 구조
 
-#### パターン1: ID + SUFFIX組み合わせ
+#### 패턴1: ID + SUFFIX 조합
 
 ```json
 {
@@ -171,7 +171,7 @@ Maestroが自動生成するスクリーンショットを確認
 
 → `FULL_APP_ID=com.example.app.development`
 
-#### パターン2: PREFIX + SUFFIX組み合わせ
+#### 패턴2: PREFIX + SUFFIX 조합
 
 ```json
 {
@@ -182,72 +182,72 @@ Maestroが自動生成するスクリーンショットを確認
 
 → `FULL_API=https://api.staging.example.com`
 
-### Flavorによる環境切り替え
+### Flavor별 환경 전환
 
-#### 設定ファイル構造
+#### 설정 파일 구조
 
 ```
 app/.dart_define/
-├── development.json    # 開発環境
-├── staging.json       # ステージング環境
-└── production.json    # 本番環境
+├── development.json    # 개발 환경
+├── staging.json       # 스테이징 환경
+└── production.json    # 운영 환경
 ```
 
-#### Flavor別テスト実行
+#### Flavor별 테스트 실행
 
 ```bash
-# 開発環境（デフォルト）
+# 개발 환경 (기본값)
 ./execute.sh counter_test.yaml
 
-# ステージング環境
+# 스테이징 환경
 ./execute.sh --flavor staging counter_test.yaml
 
-# 本番環境
+# 운영 환경
 ./execute.sh --flavor production counter_test.yaml
 ```
 
-## 実践的なワークフロー例
+## 실습적인 워크플로우 예
 
-### シナリオ: 新機能「お気に入りボタン」のテスト作成
+### 시나리오: 새 기능 "즐겨찾기 버튼" 테스트 작성
 
-#### 1. 要件確認
+#### 1. 요구사항 확인
 
 ```
-機能: 商品詳細画面にお気に入りボタンを追加
-動作: ボタンタップで状態が切り替わり、ハートアイコンが変化
-テスト観点: 初期状態、お気に入り追加、お気に入り削除
+기능: 상품 상세 화면에 즐겨찾기 버튼 추가
+동작: 버튼 탭으로 상태가 전환되고, 하트 아이콘이 변화
+테스트 관점: 초기 상태, 즐겨찾기 추가, 즐겨찾기 삭제
 ```
 
-#### 2. Claude Codeによるテスト作成
+#### 2. Claude Code에 의한 테스트 작성
 
 ```yaml
 # favorite_button_test.yaml
 appId: ${FULL_APP_ID}
 ---
-# 商品詳細画面に移動
+# 상품 상세 화면으로 이동
 - launchApp
 - tapOn:
     text: 'Products'
 - tapOn:
     text: 'First Product'
 
-# お気に入りボタンのテスト
+# 즐겨찾기 버튼 테스트
 - assertVisible: 'Product Details'
 - assertVisible:
     id: 'favorite_button'
 
-# 初期状態確認（お気に入りではない）
+# 초기 상태 확인 (즐겨찾기 아님)
 - assertVisible:
     id: 'favorite_icon_empty'
 
-# お気に入りに追加
+# 즐겨찾기에 추가
 - tapOn:
     id: 'favorite_button'
 - waitForAnimationToEnd
 - assertVisible:
     id: 'favorite_icon_filled'
 
-# お気に入りから削除
+# 즐겨찾기에서 삭제
 - tapOn:
     id: 'favorite_button'
 - waitForAnimationToEnd
@@ -255,51 +255,51 @@ appId: ${FULL_APP_ID}
     id: 'favorite_icon_empty'
 ```
 
-#### 3. 実行とデバッグ
+#### 3. 실행과 디버깅
 
 ```bash
-# 初回実行（失敗想定）
+# 첫 실행 (실패 예상)
 ./execute.sh --verbose favorite_button_test.yaml
 
-# 失敗内容の分析
-# → スクリーンショットでUI確認
-# → ログでエラー詳細確認
-# → Claude Codeが問題点を特定
+# 실패 내용 분석
+# → 스크린샷으로 UI 확인
+# → 로그로 오류 상세 확인
+# → Claude Code가 문제점을 식별
 
-# 修正と再実行
+# 수정과 재실행
 ./execute.sh favorite_button_test.yaml
 ```
 
-#### 4. 継続的改善
+#### 4. 지속적 개선
 
 ```bash
-# ウォッチモードで開発継続
+# 워치 모드로 개발 지속
 ./execute.sh --watch favorite_button_test.yaml
 
-# テスト成功後、他のケースも追加
-# - 複数商品でのテスト
-# - ネットワークエラー時の挙動
-# - アプリ再起動後の状態保持
+# 테스트 성공 후, 다른 케이스도 추가
+# - 복수 상품에서의 테스트
+# - 네트워크 오류 시의 동작
+# - 앱 재시작 후 상태 유지
 ```
 
-## 高度なテストパターン
+## 고급 테스트 패턴
 
-### 複雑なUIフローテスト
+### 복잡한 UI 플로우 테스트
 
-#### ユーザー登録からログインまでの一連の流れ
+#### 사용자 등록부터 로그인까지의 일련의 플로우
 
 ```yaml
 # user_registration_flow_test.yaml
 appId: ${FULL_APP_ID}
 ---
-# アプリ起動
+# 앱 시작
 - launchApp
 
-# 登録画面への移動
+# 등록 화면으로 이동
 - tapOn:
     text: 'Sign Up'
 
-# 必要情報の入力
+# 필요 정보 입력
 - tapOn:
     id: 'email_field'
 - inputText: 'test@example.com'
@@ -312,23 +312,23 @@ appId: ${FULL_APP_ID}
     id: 'confirm_password_field'
 - inputText: 'password123'
 
-# 利用規約同意
+# 이용약관 동의
 - tapOn:
     id: 'terms_checkbox'
 
-# 登録実行
+# 등록 실행
 - tapOn:
     text: 'Create Account'
 
-# 登録完了確認
+# 등록 완료 확인
 - waitForAnimationToEnd
 - assertVisible: 'Registration Successful'
 
-# ログイン画面への移動
+# 로그인 화면으로 이동
 - tapOn:
     text: 'Login'
 
-# ログイン実行
+# 로그인 실행
 - inputText:
     text: 'test@example.com'
     id: 'login_email_field'
@@ -340,160 +340,160 @@ appId: ${FULL_APP_ID}
 - tapOn:
     text: 'Login'
 
-# ダッシュボード表示確認
+# 대시보드 표시 확인
 - waitForAnimationToEnd
 - assertVisible: 'Welcome Dashboard'
 ```
 
-### エラーハンドリングテスト
+### 오류 처리 테스트
 
-#### ネットワークエラー時の挙動テスト
+#### 네트워크 오류 시 동작 테스트
 
 ```yaml
 # network_error_test.yaml
 appId: ${FULL_APP_ID}
 ---
-# アプリ起動
+# 앱 시작
 - launchApp
 
-# ネットワーク必須機能へアクセス
+# 네트워크 필수 기능에 액세스
 - tapOn:
     text: 'Sync Data'
 
-# エラー状態の確認
+# 오류 상태 확인
 - waitForAnimationToEnd:
     timeout: 10000
 
-# エラーメッセージ表示確認
+# 오류 메시지 표시 확인
 - assertVisible: 'Network Error'
 - assertVisible: 'Please check your connection'
 
-# リトライボタンのテスト
+# 재시도 버튼 테스트
 - tapOn:
     text: 'Retry'
 
-# 再試行後の状態確認
+# 재시도 후 상태 확인
 - waitForAnimationToEnd:
     timeout: 5000
 ```
 
-## デバッグとトラブルシューティング
+## 디버깅과 트러블슈팅
 
-### よくある問題と解決パターン
+### 자주 발생하는 문제와 해결 패턴
 
-#### 1. 要素が見つからない問題
+#### 1. 요소를 찾을 수 없는 문제
 
-**問題の特定**
+**문제 식별**
 
 ```
-Assertion '"ボタン"' failed. Element not found.
+Assertion '"버튼"' failed. Element not found.
 ```
 
-**Claude Codeによる解決手順**
+**Claude Code에 의한 해결 절차**
 
-1. スクリーンショットでUI状態を確認
-2. Flutter コードで要素のIDやテキストを確認
-3. タイミング問題かどうか判断
-4. 適切なセレクタに修正
+1. 스크린샷으로 UI 상태 확인
+2. Flutter 코드에서 요소의 ID나 텍스트 확인
+3. 타이밍 문제인지 판단
+4. 적절한 선택자로 수정
 
-**修正例**
+**수정 예**
 
 ```yaml
-# 修正前（テキストが正確ではない）
-- tapOn: 'ボタン'
+# 수정 전 (텍스트가 정확하지 않음)
+- tapOn: '버튼'
 
-# 修正後（正確なテキストまたはID使用）
+# 수정 후 (정확한 텍스트 또는 ID 사용)
 - tapOn:
     text: 'Increment'
-# または
+# 또는
 - tapOn:
     id: 'increment_button'
 ```
 
-#### 2. タイミング問題
+#### 2. 타이밍 문제
 
-**症状**
+**증상**
 
 ```
-アニメーション中にタップして失敗
-読み込み中に要素を探して失敗
+애니메이션 중에 탭해서 실패
+로딩 중에 요소를 찾아서 실패
 ```
 
-**解決策**
+**해결책**
 
 ```yaml
-# アニメーション完了を待機
+# 애니메이션 완료 대기
 - waitForAnimationToEnd
 
-# 明示的な要素待機
+# 명시적 요소 대기
 - waitUntilVisible:
     text: 'Content Loaded'
     timeout: 10000
 
-# 長時間の処理待機
+# 장시간 처리 대기
 - extendedWaitUntilVisible:
     element: 'Processing Complete'
     timeout: 30000
 ```
 
-#### 3. アプリ起動問題
+#### 3. 앱 시작 문제
 
-**問題の特定**
+**문제 식별**
 
 ```bash
-# アプリIDの確認
+# 앱ID 확인
 ./execute.sh --dry-run counter_test.yaml
 
-# 出力例
+# 출력 예
 Would execute: maestro test --env FULL_APP_ID=com.example.app.development counter_test.yaml
 ```
 
-**解決手順**
+**해결 절차**
 
-1. デバイス/シミュレータでのアプリインストール状況確認
-2. FULL_APP_IDが正しいか確認
-3. アプリのビルドとインストール状態確認
+1. 디바이스/시뮬레이터에서의 앱 설치 상황 확인
+2. FULL_APP_ID가 올바른지 확인
+3. 앱의 빌드와 설치 상태 확인
 
-### execute.shのデバッグオプション
+### execute.sh의 디버그 옵션
 
-#### 詳細ログ出力
+#### 상세 로그 출력
 
 ```bash
-# 基本的な詳細出力
+# 기본적인 상세 출력
 ./execute.sh --verbose counter_test.yaml
 
-# Maestroのデバッグ出力も含む
+# Maestro의 디버그 출력도 포함
 ./execute.sh --debug counter_test.yaml
 
-# 実行前確認（ドライラン）
+# 실행 전 확인 (드라이런)
 ./execute.sh --dry-run counter_test.yaml
 
-# 構文チェックのみ
+# 구문 검사만
 ./execute.sh --validate-only counter_test.yaml
 ```
 
-#### 出力ファイルの分析
+#### 출력 파일의 분석
 
 ```bash
-# 最新のテスト結果ディレクトリを表示
+# 최신 테스트 결과 디렉토리 표시
 ls -la test-output/ | tail -1
 
-# ログファイルの内容確認
-cat test-output/[タイムスタンプ]/maestro-output.log
+# 로그 파일 내용 확인
+cat test-output/[타임스탬프]/maestro-output.log
 
-# エラー行のみ抽出
-grep -i "error\|failed\|exception" test-output/[タイムスタンプ]/maestro-output.log
+# 오류 행만 추출
+grep -i "error\|failed\|exception" test-output/[타임스탬프]/maestro-output.log
 ```
 
-## ベストプラクティス
+## 베스트 프랙티스
 
-### テスト設計原則
+### 테스트 설계 원칙
 
-#### 1. 適切な粒度
+#### 1. 적절한 세분화
 
 ```yaml
-# ✅ 良い例：単一機能のテスト
-# login_test.yaml - ログイン機能のみテスト
+# ✅ 좋은 예: 단일 기능 테스트
+# login_test.yaml - 로그인 기능만 테스트
 appId: ${FULL_APP_ID}
 ---
 - launchApp
@@ -506,46 +506,46 @@ appId: ${FULL_APP_ID}
     id: 'password_field'
 - tapOn: 'Login Button'
 - assertVisible: 'Dashboard'
-# ❌ 悪い例：複数機能を一つのテストで
-# 登録→ログイン→商品閲覧→購入まで一つのテストで実行
+# ❌ 나쁜 예: 복수 기능을 하나의 테스트에서
+# 등록→로그인→상품 조회→구매까지 하나의 테스트에서 실행
 ```
 
-#### 2. 保守性の確保
+#### 2. 유지보수성 확보
 
 ```yaml
-# ✅ 良い例：分かりやすいステップ名
-- assertVisible: 'ユーザー名入力フィールド'
+# ✅ 좋은 예: 이해하기 쉬운 단계명
+- assertVisible: '사용자명 입력 필드'
 - inputText:
     text: 'test_user'
     id: 'username_field'
 
-# ❌ 悪い例：不明確なセレクタ
+# ❌ 나쁜 예: 불분명한 선택자
 - tapOn:
     point: '50%,60%'
 - inputText: 'test'
 ```
 
-#### 3. 環境変数の活用
+#### 3. 환경변수 활용
 
 ```yaml
-# ✅ 良い例：動的変数使用
+# ✅ 좋은 예: 동적 변수 사용
 appId: ${FULL_APP_ID}
 
-# JavaScript内での環境変数活用
+# JavaScript 내에서의 환경변수 활용
 - evalScript: |
     const apiUrl = maestro.env.FULL_API;
     output.testUrl = apiUrl + '/test';
 
-# ❌ 悪い例：ハードコーディング
+# ❌ 나쁜 예: 하드코딩
 appId: com.example.app.development
 ```
 
-### CI/CD統合のための考慮事項
+### CI/CD 통합을 위한 고려사항
 
-#### GitHub Actionsとの連携
+#### GitHub Actions와의 연계
 
 ```yaml
-# .github/workflows/ui-tests.yml での活用例
+# .github/workflows/ui-tests.yml에서의 활용 예
 - name: Run UI Tests
   run: |
     cd app/test/maestro
@@ -553,33 +553,33 @@ appId: com.example.app.development
     ./execute.sh --no-continue login_test.yaml
 ```
 
-#### テスト結果の保存
+#### 테스트 결과 저장
 
 ```bash
-# CI環境でのアーティファクト保存
+# CI 환경에서의 아티팩트 저장
 cp -r test-output/ $GITHUB_WORKSPACE/ui-test-artifacts/
 ```
 
-## まとめ
+## 정리
 
-Claude Code × Maestroワークフローは、以下の価値を提供します：
+Claude Code × Maestro 워크플로우는 다음 가치를 제공합니다:
 
-### 開発効率の向上
+### 개발 효율성 향상
 
-- **自動化された問題分析**: Claude Codeが失敗原因を特定し解決策を提案
-- **反復的改善**: ウォッチモードによる即座のフィードバックループ
-- **環境統一**: dart_define設定による一貫した環境管理
+- **자동화된 문제 분석**: Claude Code가 실패 원인을 식별하고 해결책을 제안
+- **반복적 개선**: 워치 모드를 통한 즉각적인 피드백 루프
+- **환경 통일**: dart_define 설정을 통한 일관된 환경 관리
 
-### 品質保証の強化
+### 품질 보증의 강화
 
-- **視覚的検証**: スクリーンショットによるUI状態の確認
-- **包括的テスト**: 複数シナリオとエラーケースのカバー
-- **回帰防止**: 継続的なテスト実行による品質維持
+- **시각적 검증**: 스크린샷을 통한 UI 상태 확인
+- **포괄적 테스트**: 복수 시나리오와 오류 케이스의 커버
+- **회귀 방지**: 지속적인 테스트 실행을 통한 품질 유지
 
-### チーム協働の促進
+### 팀 협업의 촉진
 
-- **標準化されたプロセス**: 統一されたテスト作成・実行手順
-- **知識共有**: ドキュメント化されたベストプラクティス
-- **自動化**: 手動テストからの脱却
+- **표준화된 프로세스**: 통일된 테스트 작성·실행 절차
+- **지식 공유**: 문서화된 베스트 프랙티스
+- **자동화**: 수동 테스트로부터의 탈출
 
-このワークフローを活用することで、高品質なFlutterアプリケーションを効率的に開発できます。
+이 워크플로우를 활용함으로써 고품질의 Flutter 애플리케이션을 효율적으로 개발할 수 있습니다.

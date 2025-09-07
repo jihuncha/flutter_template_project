@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Language Configuration
 
-- **Default Language**: Japanese
+- **Default Language**: Korean
 - **README.md Language**: The README.md file uses the default language setting for all documentation
 - **Translation Support**: Multi-language documentation can be provided through the i18n system
 
@@ -283,7 +283,7 @@ flutter_template_project/
 │   │   │   └── settings/      # Settings page components
 │   │   ├── router/            # go_router config and type-safe route definitions
 │   │   └── i18n/              # slang-generated multilingual files
-│   ├── assets/i18n/           # JSON translation files (ja.i18n.json, en.i18n.json)
+│   ├── assets/i18n/           # JSON translation files (ko.i18n.json, en.i18n.json)
 │   ├── test/                  # Widget tests
 │   ├── android/               # Android platform specific files
 │   ├── ios/                   # iOS platform specific files
@@ -380,7 +380,7 @@ export ENABLE_BACKGROUND_TASKS=true
 export FLUTTER_VERSION_MANAGEMENT=mise
 export TASK_MANAGEMENT_SYSTEM=github
 export PARALLEL_DEVELOPMENT=git_worktree
-export PR_LANGUAGE=japanese
+export PR_LANGUAGE=korean
 export COMPLETION_NOTIFICATION=alarm
 export INTERACTIVE_MODE=true
 export ISSUE_SELECTION_UI=enabled
@@ -414,7 +414,7 @@ export CHECK_PR_WORKFLOW="check-pr.yml" # Target workflow file to monitor
 
 ### Internationalization: slang
 
-- **Translation Files**: Place `ja.i18n.json` and `en.i18n.json` in `app/assets/i18n/`
+- **Translation Files**: Place `ko.i18n.json` and `en.i18n.json` in `app/assets/i18n/`
 - **Type-safe Access**: Access translation strings with `context.i18n.someKey`
 - **Dynamic Switching**: Runtime language switching using LocaleSettings
 
