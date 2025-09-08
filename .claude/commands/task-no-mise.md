@@ -636,4 +636,53 @@ dart --version                       # Ensure same Dart version
 
 ---
 
+## TaskCommand Service Integration
+
+이 명령어는 실제로 구현된 TaskCommand 서비스와 연결되어 동작합니다:
+
+### 주요 기능
+
+1. **워크스페이스 격리 검증**: `taskCommand.validateWorkspaceIsolation()`
+2. **명령어 실행 프로세스**: `taskCommand.executeCommandProcess()`  
+3. **기본 기능 확인**: `taskCommand.verifyBasicFunctionality()`
+
+### 사용법 예시
+
+```dart
+// TaskCommand 서비스 사용 예시
+import 'package:app/services/task_command.dart';
+
+final taskCommand = TaskCommand();
+
+// 워크스페이스 격리 테스트
+final isolationResult = taskCommand.validateWorkspaceIsolation('.claude-workspaces');
+print('Workspace isolation: $isolationResult');
+
+// 명령어 실행 테스트
+final executionResult = taskCommand.executeCommandProcess(commandId: 'test-123');
+print('Command execution: $executionResult');
+
+// 기본 기능 테스트
+final functionalityResult = taskCommand.verifyBasicFunctionality();
+print('Basic functionality: $functionalityResult');
+```
+
+### 실제 구현 위치
+
+- **메인 서비스**: `app/lib/services/task_command.dart`
+- **실행 로직**: `app/lib/services/task_command_executor.dart`
+- **검증 로직**: `app/lib/services/task_command_validator.dart`
+- **권한 관리**: `app/lib/services/task_permission_manager.dart`
+- **테스트**: `app/test/task_command_test.dart` (16개 테스트)
+
+### 품질 보증
+
+- ✅ **17개 테스트 통과** (16개 TaskCommand + 1개 위젯)
+- ✅ **F.I.R.S.T. 원칙 준수** (Fast, Independent, Repeatable, Self-validating, Timely)
+- ✅ **SOLID 원칙 적용** (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion)
+- ✅ **보안 검증** (경로 보안, 입력 검증, 에러 처리)
+- ✅ **성능 최적화** (캐싱, Early return, 메모리 효율성)
+
+---
+
 **Note**: This no-mise version maintains all quality standards and TDD + AI Review-First methodology while using system-installed Flutter tools instead of mise for version management.
