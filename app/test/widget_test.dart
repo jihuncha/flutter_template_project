@@ -32,4 +32,88 @@ void main() {
       );
     });
   });
+
+  group('Decrement Counter Tests (TDD - Red Phase)', () {
+    testWidgets('should render decrement button', (tester) async {
+      // Arrange
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // Act & Assert
+      expect(find.byIcon(Icons.remove), findsOneWidget);
+      expect(find.byTooltip('Decrement'), findsOneWidget);
+    });
+
+    testWidgets('should decrement counter when decrement button tapped', (
+      tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // First increment to 1
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+
+      // Act
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+
+      // Assert
+      expect(find.textContaining('0'), findsOneWidget);
+    });
+
+    testWidgets('should allow negative counter values', (tester) async {
+      // Arrange
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // Act - tap decrement from initial 0
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+
+      // Assert
+      expect(find.textContaining('-1'), findsOneWidget);
+    });
+
+    testWidgets(
+      'should maintain state during increment/decrement combination',
+      (tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          ProviderScope(
+            child: app_translations.TranslationProvider(
+              child: const MaterialApp(home: HomePage()),
+            ),
+          ),
+        );
+
+        // Act - complex sequence
+        await tester.tap(find.byIcon(Icons.add)); // +1
+        await tester.pump();
+        await tester.tap(find.byIcon(Icons.add)); // +2
+        await tester.pump();
+        await tester.tap(find.byIcon(Icons.remove)); // +1
+        await tester.pump();
+
+        // Assert
+        expect(find.textContaining('1'), findsOneWidget);
+      },
+    );
+  });
 }

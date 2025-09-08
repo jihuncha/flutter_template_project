@@ -1,4 +1,5 @@
 import 'package:app/i18n/translations.g.dart';
+import 'package:app/providers/counter_provider.dart';
 import 'package:app/router/routes.dart';
 import 'package:core/core.dart' hide LocaleSettings;
 import 'package:flutter/material.dart';
@@ -12,8 +13,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
-  var _counter = 0;
-
   /// Performance measurement helper method
   void _measurePerformance(
     String operation,
@@ -32,23 +31,41 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
   }
 
   void _incrementCounter() {
+    final counter = ref.read(counterProvider.notifier);
+    final currentValue = ref.read(counterProvider);
+
     // Log user action with structured logging using mixin
     logUserAction(
       'counter_increment',
-      {'previous_value': _counter, 'new_value': _counter + 1},
+      {'previous_value': currentValue, 'new_value': currentValue + 1},
     );
 
     // Use performance measurement helper
     _measurePerformance('counter_update', () {
-      setState(() {
-        _counter++;
-      });
-    }, metadata: {'counter_value': _counter + 1});
+      counter.increment();
+    }, metadata: {'counter_value': currentValue + 1});
+  }
+
+  void _decrementCounter() {
+    final counter = ref.read(counterProvider.notifier);
+    final currentValue = ref.read(counterProvider);
+
+    // Log user action with structured logging using mixin
+    logUserAction(
+      'counter_decrement',
+      {'previous_value': currentValue, 'new_value': currentValue - 1},
+    );
+
+    // Use performance measurement helper
+    _measurePerformance('counter_update', () {
+      counter.decrement();
+    }, metadata: {'counter_value': currentValue - 1});
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final counterValue = ref.watch(counterProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,16 +82,29 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '${t.home.counter}: $_counter',
+              '${t.home.counter}: $counterValue',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            heroTag: 'increment',
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: _decrementCounter,
+            tooltip: 'Decrement',
+            heroTag: 'decrement',
+            child: const Icon(Icons.remove),
+          ),
+        ],
       ),
     );
   }
