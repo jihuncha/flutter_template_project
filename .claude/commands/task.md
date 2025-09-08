@@ -1,50 +1,50 @@
-# GitHub Issue Processing Command - Claude 4 Best Practices & TDD Integration
+# GitHub Issue 처리 명령어 - Claude 4 모범 사례 & TDD 통합
 
-**IMPORTANT**: This command implements TDD + AI Review-First design following Claude 4 best practices and Test-Driven Development principles for high-quality Flutter development using GitHub Issues.
+**중요**: 이 명령어는 GitHub Issues를 사용한 고품질 Flutter 개발을 위해 Claude 4 모범 사례와 테스트 주도 개발 원칙을 따르는 TDD + AI Review-First 설계를 구현합니다.
 
-## Overview
+## 개요
 
-Process GitHub Issues using TDD + AI Review-First methodology. This command creates isolated work environments, applies Red-Green-Refactor cycles with structured AI review integration, and ensures quality standards through automated validation.
+TDD + AI Review-First 방법론을 사용하여 GitHub Issues를 처리합니다. 이 명령어는 격리된 작업 환경을 생성하고, 구조화된 AI 리뷰 통합과 함께 Red-Green-Refactor 사이클을 적용하며, 자동화된 검증을 통해 품질 표준을 보장합니다.
 
-## Core Principles (Claude 4 + TDD Best Practices)
+## 핵심 원칙 (Claude 4 + TDD 모범 사례)
 
-**References**:
+**참고 문서**:
 
 - `docs/CLAUDE_4_BEST_PRACTICES.md`
 - `docs/TEST_DRIVEN_DEVELOPMENT.md`
 
-### TDD + AI Review-First Methodology
+### TDD + AI Review-First 방법론
 
-- **Core Cycle**: Red (failing test) → Green (minimal implementation) → AI Review → Refactor → Release
-- **30% Test Strategy**: Start with minimal failing tests, implement to pass, then improve through AI review
-- **Approach**: Use AI as "Senior Reviewer" for TDD cycles, not "Junior Designer"
-- **Review Cycles**: 3-4 iterative AI review cycles during Refactor phase
-- **Priority Order**: Security (HIGH) → SOLID Principles (MEDIUM) → Performance (LOW)
+- **핵심 사이클**: Red (실패하는 테스트) → Green (최소 구현) → AI 리뷰 → 리팩터링 → 릴리스
+- **30% 테스트 전략**: 최소 실패 테스트로 시작하여 통과하도록 구현한 다음 AI 리뷰를 통해 개선
+- **접근법**: TDD 사이클에서 AI를 "주니어 디자이너"가 아닌 "시니어 리뷰어"로 사용
+- **리뷰 사이클**: 리팩터링 단계에서 3-4회 반복 AI 리뷰 사이클
+- **우선순위**: 보안 (HIGH) → SOLID 원칙 (MEDIUM) → 성능 (LOW)
 
-### F.I.R.S.T. Principles Integration
+### F.I.R.S.T. 원칙 통합
 
-- **F**ast: Tests execute in < 0.1 seconds
-- **I**ndependent: Tests don't depend on each other
-- **R**epeatable: Consistent results across environments
-- **S**elf-validating: Clear pass/fail outcomes
-- **T**imely: Tests written before implementation
+- **F**ast(빠름): 테스트는 0.1초 이내에 실행
+- **I**ndependent(독립성): 테스트들은 서로 의존하지 않음
+- **R**epeatable(반복 가능): 환경에 관계없이 일관된 결과
+- **S**elf-validating(자체 검증): 명확한 pass/fail 결과
+- **T**imely(적시성): 구현 전에 테스트 작성
 
-### Clear Instructions with TDD Context
+### TDD 컨텍스트와 명확한 지침
 
-- Eliminate ambiguity in test requirements and implementation goals
-- Define specific TDD acceptance criteria and quality gates
-- Provide structured AI review templates for Red-Green-Refactor cycles
+- 테스트 요구사항과 구현 목표의 모호성 제거
+- 구체적인 TDD 수락 기준과 품질 게이트 정의
+- Red-Green-Refactor 사이클을 위한 구조화된 AI 리뷰 템플릿 제공
 
-### Structured Quality Assessment with TDD Focus
+### TDD 중심의 구조화된 품질 평가
 
-Apply consistent TDD + AI evaluation framework:
+일관된 TDD + AI 평가 프레임워크 적용:
 
 ```
-1. Test Quality (F.I.R.S.T. compliance) - validation phase
-2. Security vulnerabilities (HIGH PRIORITY) - AI review phase
-3. SOLID principle violations (MEDIUM PRIORITY) - AI review phase
-4. Performance optimization (LOW PRIORITY) - AI review phase
-Constraint: Summarize findings within 400 characters per category
+1. 테스트 품질 (F.I.R.S.T. 준수) - 검증 단계
+2. 보안 취약점 (HIGH 우선순위) - AI 리뷰 단계
+3. SOLID 원칙 위반 (MEDIUM 우선순위) - AI 리뷰 단계
+4. 성능 최적화 (LOW 우선순위) - AI 리뷰 단계
+제약 사항: 각 카테고리당 400자 이내로 결과 요약
 ```
 
 ## Execution Modes

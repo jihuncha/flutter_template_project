@@ -7,7 +7,7 @@
 part of 'translations.g.dart';
 
 // Path: <root>
-typedef TranslationsJa = Translations; // ignore: unused_element
+typedef TranslationsKo = Translations; // ignore: unused_element
 
 class Translations implements BaseTranslations<AppLocale, Translations> {
   /// Returns the current translations of the given [context].
@@ -31,13 +31,13 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
        $meta =
            meta ??
            TranslationMetadata(
-             locale: AppLocale.ja,
+             locale: AppLocale.ko,
              overrides: overrides ?? {},
              cardinalResolver: cardinalResolver,
              ordinalResolver: ordinalResolver,
            );
 
-  /// Metadata for the translations of <ja>.
+  /// Metadata for the translations of <ko>.
   @override
   final TranslationMetadata<AppLocale, Translations> $meta;
 
@@ -48,29 +48,29 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
   }) => Translations(meta: meta ?? this.$meta);
 
   // Translations
-  late final TranslationsSettingsJa settings = TranslationsSettingsJa._(_root);
+  late final TranslationsSettingsKo settings = TranslationsSettingsKo._(_root);
 }
 
 // Path: settings
-class TranslationsSettingsJa {
-  TranslationsSettingsJa._(this._root);
+class TranslationsSettingsKo {
+  TranslationsSettingsKo._(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// ja: '設定'
-  String get title => '設定';
+  /// ko: '설정'
+  String get title => '설정';
 
-  /// ja: '言語'
-  String get language => '言語';
+  /// ko: '언어'
+  String get language => '언어';
 
-  /// ja: 'テーマ'
-  String get theme => 'テーマ';
+  /// ko: '테마'
+  String get theme => '테마';
 
-  /// ja: 'バージョン'
-  String get version => 'バージョン';
+  /// ko: '버전'
+  String get version => '버전';
 
-  /// ja: 'ライセンス'
-  String get licenses => 'ライセンス';
+  /// ko: '라이선스'
+  String get licenses => '라이선스';
 }

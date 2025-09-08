@@ -1,52 +1,52 @@
-# .claude/CLAUDE.md - Local Claude Code Configuration
+# .claude/CLAUDE.md - 로컬 Claude Code 설정
 
-This file provides local guidance to Claude Code when working within this specific workspace, overriding any root-level CLAUDE.md configurations.
+이 파일은 특정 워크스페이스 내에서 작업할 때 Claude Code에 로컬 지침을 제공하며, 루트 레벨의 CLAUDE.md 설정을 오버라이드합니다.
 
-## Command Argument Validation Workflow
+## 명령어 인수 검증 워크플로우
 
-When executing commands defined in `.claude/commands/`, the following workflow applies:
+`.claude/commands/`에서 정의된 명령어를 실행할 때 다음 워크플로우가 적용됩니다:
 
-### Argument Validation Rule
+### 인수 검증 규칙
 
-**For commands requiring arguments:**
+**인수가 필요한 명령어의 경우:**
 
-1. **Check Arguments**: Verify if required arguments are provided
-2. **Missing Arguments Action**:
-   - Display error message: `⏺ Please provide required arguments`
-   - Log termination reason
-   - **Skip "Update Todos" phase**
-   - **Terminate processing immediately**
-   - **Do NOT proceed with any command execution**
+1. **인수 확인**: 필수 인수가 제공되었는지 확인
+2. **인수 누락 시 동작**:
+   - 오류 메시지 표시: `⏺ Please provide required arguments`
+   - 종료 이유를 로그에 기록
+   - **"Update Todos" 단계 건너뛰기**
+   - **처리를 즉시 종료**
+   - **명령어 실행을 계속하지 않음**
 
-3. **Arguments Provided**: Continue with normal command processing
+3. **인수 제공 시**: 일반적인 명령어 처리를 계속
 
-### Implementation Pattern
+### 구현 패턴
 
 ```bash
-# Command execution pattern
+# 명령어 실행 패턴
 if [[ -z "${REQUIRED_ARG}" ]]; then
     echo "⏺ Please provide required arguments"
     echo "📝 Terminating: Missing required arguments"
     exit 0
 fi
 
-# Continue with command processing...
+# 명령어 처리를 계속...
 ```
 
-## Root CLAUDE.md Override
+## 루트 CLAUDE.md 오버라이드
 
-**IMPORTANT**: This local `.claude/CLAUDE.md` configuration **overrides** and **ignores** the root-level CLAUDE.md file located at the project root.
+**중요**: 이 로컬 `.claude/CLAUDE.md` 설정은 프로젝트 루트에 위치한 루트 레벨 CLAUDE.md 파일을 **오버라이드**하고 **무시**합니다.
 
-- Root CLAUDE.md path: `CLAUDE.md` (IGNORED)
-- Local CLAUDE.md path: `.claude-workspaces/TASK-84/.claude/CLAUDE.md` (ACTIVE)
+- 루트 CLAUDE.md 경로: `CLAUDE.md` (무시됨)
+- 로컬 CLAUDE.md 경로: `.claude/CLAUDE.md` (활성)
 
-## Command-Specific Rules
+## 명령어별 규칙
 
-### /file-to-issue Command
+### /file-to-issue 명령어
 
-**Required Arguments**: File path
+**필수 인수**: 파일 경로
 
-**Validation Workflow**:
+**검증 워크플로우**:
 
 ```bash
 if [[ -z "${FILE_PATH}" ]]; then
@@ -56,33 +56,33 @@ if [[ -z "${FILE_PATH}" ]]; then
 fi
 ```
 
-### Future Commands
+### 향후 명령어
 
-All commands defined in `.claude/commands/` directory must implement the same argument validation pattern:
+`.claude/commands/` 디렉토리에서 정의되는 모든 명령어는 동일한 인수 검증 패턴을 구현해야 합니다:
 
-1. Check for required arguments
-2. Early termination if missing
-3. Skip todos/cleanup phases
-4. Log reason for termination
+1. 필수 인수 확인
+2. 누락 시 조기 종료
+3. todos/정리 단계 건너뛰기
+4. 종료 이유 로그 기록
 
-## Workspace Isolation
+## 워크스페이스 격리
 
-This workspace operates in isolation from the root project configuration:
+이 워크스페이스는 루트 프로젝트 설정과 격리되어 동작합니다:
 
-- **Independent command execution**
-- **Separate memory/context**
-- **Local-only configuration rules**
-- **Override root-level instructions**
+- **독립적인 명령어 실행**
+- **분리된 메모리/컨텍스트**
+- **로컬 전용 설정 규칙**
+- **루트 레벨 지침 오버라이드**
 
-## Priority Order
+## 우선순위
 
-Configuration priority (highest to lowest):
+설정 우선순위 (높은 순):
 
-1. `.claude/CLAUDE.md` (this file) - **HIGHEST PRIORITY**
-2. `.claude/commands/*.md` - Command-specific configurations
-3. Local environment variables
-4. Root CLAUDE.md - **IGNORED IN THIS WORKSPACE**
+1. `.claude/CLAUDE.md` (이 파일) - **최고 우선순위**
+2. `.claude/commands/*.md` - 명령어별 설정
+3. 로컬 환경 변수
+4. 루트 CLAUDE.md - **이 워크스페이스에서는 무시됨**
 
 ---
 
-**Note**: This configuration ensures consistent argument validation across all custom commands while maintaining workspace isolation from root project settings.
+**참고**: 이 설정은 루트 프로젝트 설정에서 워크스페이스 격리를 유지하면서 모든 커스텀 명령어에서 일관된 인수 검증을 보장합니다.

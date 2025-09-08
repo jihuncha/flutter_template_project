@@ -50,7 +50,7 @@ class TranslationsEn implements Translations {
 }
 
 // Path: settings
-class _TranslationsSettingsEn implements TranslationsSettingsJa {
+class _TranslationsSettingsEn implements TranslationsSettingsKo {
   _TranslationsSettingsEn._(this._root);
 
   final TranslationsEn _root; // ignore: unused_field

@@ -54,7 +54,7 @@ class SettingsPage extends ConsumerWidget {
             // Update slang locale settings for immediate UI update
             final appLocale = AppLocale.values.firstWhere(
               (locale) => locale.languageCode == languageCode,
-              orElse: () => AppLocale.ja,
+              orElse: () => AppLocale.ko,
             );
             unawaited(LocaleSettings.setLocale(appLocale));
           },
