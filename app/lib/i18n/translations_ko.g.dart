@@ -48,7 +48,20 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
   }) => Translations(meta: meta ?? this.$meta);
 
   // Translations
+  late final TranslationsHomeKo home = TranslationsHomeKo._(_root);
   late final TranslationsSettingsKo settings = TranslationsSettingsKo._(_root);
+}
+
+// Path: home
+class TranslationsHomeKo {
+  TranslationsHomeKo._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// ko: '카운터'
+  String get counter => '카운터';
 }
 
 // Path: settings

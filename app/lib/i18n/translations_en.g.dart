@@ -44,9 +44,22 @@ class TranslationsEn implements Translations {
 
   // Translations
   @override
+  late final _TranslationsHomeEn home = _TranslationsHomeEn._(_root);
+  @override
   late final _TranslationsSettingsEn settings = _TranslationsSettingsEn._(
     _root,
   );
+}
+
+// Path: home
+class _TranslationsHomeEn implements TranslationsHomeKo {
+  _TranslationsHomeEn._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get counter => 'Counter';
 }
 
 // Path: settings

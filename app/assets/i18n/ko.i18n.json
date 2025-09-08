@@ -1,4 +1,7 @@
 {
+  "home": {
+    "counter": "카운터"
+  },
   "settings": {
     "title": "설정",
     "language": "언어",

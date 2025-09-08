@@ -1,5 +1,6 @@
+import 'package:app/i18n/translations.g.dart';
 import 'package:app/router/routes.dart';
-import 'package:core/core.dart';
+import 'package:core/core.dart' hide LocaleSettings;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -47,6 +48,8 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -62,7 +65,7 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'カウンター: $_counter',
+              '${t.home.counter}: $_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

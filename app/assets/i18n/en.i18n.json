@@ -1,4 +1,7 @@
 {
+  "home": {
+    "counter": "Counter"
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
