@@ -49,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
