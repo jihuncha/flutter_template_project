@@ -40,7 +40,7 @@ graph TD
 
 This project follows the Claude 4 prompt engineering best practices defined in `docs/CLAUDE_4_BEST_PRACTICES.md`. The implementation focuses on the core principle:
 
-**「小さなドラフト → 厳しい批評 → 再生成 → リリース」(Small draft → Critical review → Regenerate → Release)**
+**「작은 초안 → 엄격한 비평 → 재생성 → 릴리스」(Small draft → Critical review → Regenerate → Release)**
 
 ### Core Implementation Principles
 
@@ -155,7 +155,7 @@ Constraints:
 - Essential functionality only (no extra features)
 - Reference existing patterns: [provide specific file examples]
 - Follow project conventions: [naming, structure, dependencies]
-- Technology stack: Riverpod (@riverpod), go_router (type-safe), slang (ja/en)
+- Technology stack: Riverpod (@riverpod), go_router (type-safe), slang (ko/en)
 
 Phase 2 - AI Review Request:
 Apply Claude 4 Review-First methodology:
@@ -221,7 +221,7 @@ Requirements:
 - Technical accuracy for Claude Code
 - Human readability for README.md
 - Include relevant Mermaid diagrams
-- Follow project's Japanese language standard for README.md
+- Follow project's Korean language standard for README.md
 - Maintain existing section structure
 
 Constraints:
@@ -486,7 +486,7 @@ For detailed GitHub Issue processing workflow, execution examples, and configura
 ### Git Workflow
 
 - Use [Conventional Commits](https://www.conventionalcommits.org/) format for commit messages
-- **Branch naming**: Use only `feature/ISSUE_ID` format (no Japanese/English descriptions)
+- **Branch naming**: Use only `feature/ISSUE_ID` format (no Korean/English descriptions)
 - PR checks automatically execute with `.github/workflows/check-pr.yml`
 - Includes analysis, formatting, testing, i18n validation
 
