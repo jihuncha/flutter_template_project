@@ -46,6 +46,24 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
     }, metadata: {'counter_value': _counter + 1});
   }
 
+  void _decrementCounter() {
+    // Prevent counter from going below 0
+    if (_counter <= 0) return;
+
+    // Log user action with structured logging using mixin
+    logUserAction(
+      'counter_decrement',
+      {'previous_value': _counter, 'new_value': _counter - 1},
+    );
+
+    // Use performance measurement helper
+    _measurePerformance('counter_update', () {
+      setState(() {
+        _counter--;
+      });
+    }, metadata: {'counter_value': _counter - 1});
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -71,10 +89,23 @@ class _HomePageState extends ConsumerState<HomePage> with LoggerMixin {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _decrementCounter,
+            tooltip: 'Decrement',
+            heroTag: 'decrement',
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            heroTag: 'increment',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

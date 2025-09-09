@@ -20,8 +20,8 @@ void main() {
     }
   });
 
-  group('Basic Widget Tests', () {
-    testWidgets('Counter increments smoke test', (tester) async {
+  group('Counter Widget Tests', () {
+    testWidgets('Counter starts at 0', (tester) async {
       // Build our app and trigger a frame.
       await tester.pumpWidget(
         ProviderScope(
@@ -30,6 +30,96 @@ void main() {
           ),
         ),
       );
+
+      // Verify that our counter starts at 0.
+      expect(find.text('카운터: 0'), findsOneWidget);
+      expect(find.text('카운터: 1'), findsNothing);
+    });
+
+    testWidgets('Counter increments when + button is tapped', (tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // Tap the '+' icon and trigger a frame.
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+
+      // Verify that our counter has incremented.
+      expect(find.text('카운터: 1'), findsOneWidget);
+      expect(find.text('카운터: 0'), findsNothing);
+    });
+
+    testWidgets('Counter decrements when - button is tapped', (tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // First increment to 1
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(find.text('카운터: 1'), findsOneWidget);
+
+      // Then tap the '-' icon and trigger a frame.
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+
+      // Verify that our counter has decremented.
+      expect(find.text('카운터: 0'), findsOneWidget);
+      expect(find.text('카운터: 1'), findsNothing);
+    });
+
+    testWidgets('Counter cannot go below 0', (tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // Counter starts at 0, try to decrement
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+
+      // Verify that our counter stays at 0.
+      expect(find.text('카운터: 0'), findsOneWidget);
+    });
+
+    testWidgets('Multiple increment and decrement operations work correctly', (tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(
+        ProviderScope(
+          child: app_translations.TranslationProvider(
+            child: const MaterialApp(home: HomePage()),
+          ),
+        ),
+      );
+
+      // Increment 3 times
+      for (int i = 0; i < 3; i++) {
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pump();
+      }
+      expect(find.text('카운터: 3'), findsOneWidget);
+
+      // Decrement 2 times
+      for (int i = 0; i < 2; i++) {
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pump();
+      }
+      expect(find.text('카운터: 1'), findsOneWidget);
     });
   });
 }
