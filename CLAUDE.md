@@ -112,8 +112,8 @@ All implementations must pass these gates:
 - Secure storage patterns used
 
 # Architecture Gates (MEDIUM Priority)
-mise run analyze          # Static analysis
-mise run test            # All tests pass
+melos run analyze          # Static analysis
+melos run test            # All tests pass
 
 # Performance Gates (LOW Priority)
 - No obvious bottlenecks identified
@@ -125,10 +125,10 @@ mise run test            # All tests pass
 - [ ] HIGH priority security issues: ✅ Resolved
 - [ ] MEDIUM priority architecture issues: ✅ Addressed
 - [ ] LOW priority performance issues: ✅ Optimized
-- [ ] Static analysis: ✅ `mise run analyze` passes
-- [ ] All tests: ✅ `mise run test` passes
-- [ ] Translation validation: ✅ `mise run analyze-slang` passes
-- [ ] Code formatting: ✅ `mise run format` applied
+- [ ] Static analysis: ✅ `melos run analyze` passes
+- [ ] All tests: ✅ `melos run test` passes
+- [ ] Translation validation: ✅ `melos run analyze-slang` passes
+- [ ] Code formatting: ✅ `melos run format` applied
 - [ ] Human validation: ✅ Final review completed
 
 ### Context Requirements for AI Interactions
@@ -165,9 +165,9 @@ Apply Claude 4 Review-First methodology:
 Format: 400 chars max per category, actionable recommendations
 
 Phase 3 - Quality Validation:
-- Pass: mise run analyze (static analysis)
-- Pass: mise run test (all tests)
-- Pass: mise run analyze-slang (translations)
+- Pass: melos run analyze (static analysis)
+- Pass: melos run test (all tests)
+- Pass: melos run analyze-slang (translations)
 - Include: Widget tests in app/test/
 - Include: Proper error handling patterns
 
@@ -258,7 +258,7 @@ This is a Flutter mobile application development project using Claude Code with 
 ### Technology Stack
 
 - **Framework**: Flutter (Workspace/Monorepo structure)
-- **Version Management**: mise (polyglot tool version manager)
+- **Version Management**: System Flutter installation
 - **Task Management**: GitHub Issues
 - **Parallel Development**: git worktree
 - **Automation**: Claude Code with background tasks
@@ -310,47 +310,48 @@ flutter_template_project/
 
 ### Requirements
 
-- Flutter SDK (managed by mise)
-- bun (managed by mise)
+- Flutter SDK (system installation)
+- Dart SDK (included with Flutter)
 - Git worktree support
 - GitHub CLI (gh) installed and authenticated
 - Claude Code ENABLE_BACKGROUND_TASKS enabled
+- Melos (dart pub global activate melos)
 - Bun (for commitlint, prettier, faster than Node.js)
 
 ## Development Commands
 
-### Mise Tasks (Recommended - Unified Interface)
+### Melos Tasks (Recommended - Unified Interface)
 
 ```bash
 # Complete development workflow
-mise run dev
+melos run dev
 
 # Initial project setup
-mise run setup
+melos run setup
 
 # Code quality workflow
-mise run quality
+melos run quality
 
 # Complete CI workflow
-mise run ci-check
+melos run ci-check
 ```
 
-### Individual Mise Tasks
+### Individual Melos Tasks
 
 ```bash
 # Code analysis and testing
-mise run analyze          # Static analysis (calls melos run analyze)
-mise run analyze-slang    # Translation validation (calls melos run analyze:slang)
-mise run test             # Run tests (calls melos run test)
+melos run analyze          # Static analysis
+melos run analyze:slang    # Translation validation
+melos run test             # Run tests
 
 # Code formatting
-mise run format       # Format all files (calls both above)
+melos run format       # Format all files
 
 # Build and run
-mise run run              # Run app (debug) (calls melos exec --scope=app -- flutter run)
+flutter run                # Run app (debug)
 
 # Maintenance
-mise run clean-branch     # Clean git branches/worktrees (calls ./scripts/clean-branch.sh)
+melos run clean-branch     # Clean git branches/worktrees
 ```
 
 ### Legacy Commands (Still Available)
@@ -377,7 +378,7 @@ bun run clean             # Clean and reinstall
 
 ```bash
 export ENABLE_BACKGROUND_TASKS=true
-export FLUTTER_VERSION_MANAGEMENT=mise
+export FLUTTER_VERSION_MANAGEMENT=system
 export TASK_MANAGEMENT_SYSTEM=github
 export PARALLEL_DEVELOPMENT=git_worktree
 export PR_LANGUAGE=korean
@@ -536,7 +537,7 @@ flowchart LR
 3. **AI Architecture Review** (MEDIUM Priority - Address Next):
 
    ```bash
-   mise run analyze    # Static analysis compliance
+   melos run analyze    # Static analysis compliance
    # SOLID principles evaluation
    # Design pattern consistency review
    # Code organization assessment
@@ -545,7 +546,7 @@ flowchart LR
 4. **AI Performance Review** (LOW Priority - Optimize Later):
 
    ```bash
-   mise run test      # Performance regression testing
+   melos run test      # Performance regression testing
    # Algorithmic efficiency analysis
    # Resource utilization review
    # Build impact assessment
@@ -553,9 +554,9 @@ flowchart LR
 
 5. **Quality Gate Validation**:
    ```bash
-   mise run ci-check           # Complete CI validation
-   mise run analyze-slang      # Translation validation
-   mise run format         # Code formatting
+   melos run ci-check           # Complete CI validation
+   melos run analyze-slang      # Translation validation
+   melos run format         # Code formatting
    # Human final validation
    ```
 
@@ -598,7 +599,7 @@ flowchart LR
    - Verify GitHub Actions workflow compatibility
 3. **Automated Validation**:
    ```bash
-   mise run setup             # Environment setup
+   melos run setup             # Environment setup
    melos bootstrap           # Dependencies installation
    melos run gen             # Code generation test
    ```
@@ -626,7 +627,7 @@ All development must meet these Claude 4 Best Practices criteria:
 
 ```bash
 grep -r "API_KEY\|SECRET\|PASSWORD\|TOKEN" lib/  # Must return empty
-mise run analyze                                # Must pass
+melos run analyze                                # Must pass
 ```
 
 #### 🟡 Architecture Standards (MEDIUM Priority - Important)
@@ -664,7 +665,7 @@ mise run analyze                                # Must pass
 - **Summary constraint**: 400 characters maximum per category
 - **Issue resolution order**: 🔴 HIGH → 🟡 MEDIUM → 🟢 LOW
 - **Final validation**: Human review required for production release
-- **Quality gate**: All `mise run ci-check` tests must pass
+- **Quality gate**: All `melos run ci-check` tests must pass
 
 **Review Output Format**:
 

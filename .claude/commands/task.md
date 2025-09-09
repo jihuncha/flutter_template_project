@@ -1,6 +1,6 @@
-# GitHub Issue 처리 명령어 - Claude 4 모범 사례 & TDD 통합
+# GitHub Issue 처리 명령어 - Claude 4 모범 사례 & TDD 통합 (No Mise Version)
 
-**중요**: 이 명령어는 GitHub Issues를 사용한 고품질 Flutter 개발을 위해 Claude 4 모범 사례와 테스트 주도 개발 원칙을 따르는 TDD + AI Review-First 설계를 구현합니다.
+**중요**: 이 명령어는 GitHub Issues를 사용한 고품질 Flutter 개발을 위해 Claude 4 모범 사례와 테스트 주도 개발 원칙을 따르는 TDD + AI Review-First 설계를 구현합니다. **이 버전은 mise를 사용하지 않고 Flutter 기본 도구만 사용합니다.**
 
 ## 개요
 
@@ -52,7 +52,7 @@ TDD + AI Review-First 방법론을 사용하여 GitHub Issues를 처리합니다
 ### Interactive Mode (No Arguments)
 
 ```bash
-/task
+/task-no-mise
 ```
 
 **Behavior**:
@@ -68,7 +68,7 @@ TDD + AI Review-First 방법론을 사용하여 GitHub Issues를 처리합니다
 ### Automatic Mode (With Arguments)
 
 ```bash
-/task #123 #456
+/task-no-mise #123 #456
 ```
 
 **Behavior**:
@@ -89,7 +89,12 @@ TDD + AI Review-First 방법론을 사용하여 GitHub Issues를 처리합니다
 **TDD Actions**:
 
 - Parse Issue Template acceptance criteria and testing strategy
-- Configure Flutter test environment using `mise`
+- **Configure Flutter test environment using direct Flutter commands**:
+  ```bash
+  flutter --version              # Verify Flutter installation
+  flutter doctor                 # Check Flutter setup
+  flutter pub get               # Install dependencies
+  ```
 - Create dedicated feature branch via `git worktree add .claude-workspaces/issue-{number}/`
 - Write 30% tests: single behavior, minimal expectations
 - Validate Issue Template compliance (functional/non-functional/security requirements)
@@ -178,14 +183,22 @@ Constraints:
 
 ### Phase 4: Release Preparation with TDD Validation
 
-**TDD Release Actions**:
+**TDD Release Actions (No Mise)**:
 
-- Execute complete TDD validation suite:
+- Execute complete TDD validation suite using direct commands:
   ```bash
+  # For Melos projects
+  dart pub global activate melos
   melos run test              # All tests (unit, widget, integration)
   melos run analyze          # Static analysis (dart analyze)
   melos run format           # Code formatting (dart format)
   melos run analyze-slang    # Translation validation
+  
+  # Alternative: Direct Flutter commands
+  flutter test                    # Run all tests
+  dart analyze --fatal-infos      # Static analysis
+  dart format --set-exit-if-changed .  # Format validation
+  flutter pub get                 # Dependencies check
   ```
 - Verify F.I.R.S.T. compliance: test independence, speed, repeatability
 - Run TDD quality metrics: cycle time (Red: 5min, Green: 10min, Refactor: 15min)
@@ -203,6 +216,129 @@ Constraints:
 - ✅ **AI Review Standards**: All security, SOLID, performance criteria met
 - ✅ **CI/CD Pipeline**: All GitHub Actions checks pass including test execution
 - ✅ **Issue Template Compliance**: All acceptance criteria validated and documented
+
+## Flutter Commands Integration (No Mise)
+
+### Primary Commands (Melos + Direct Flutter)
+
+```bash
+# Environment Setup (No Mise)
+flutter --version                        # Check Flutter installation
+flutter doctor                          # Verify Flutter setup
+dart pub global activate melos          # Install Melos globally
+
+# Project Setup
+melos bootstrap                          # Install dependencies for workspace
+# Alternative: flutter pub get && cd packages/core && flutter pub get
+
+# Code generation (freezed, riverpod, go_router, slang)
+melos run gen
+# Alternative: dart run build_runner build --delete-conflicting-outputs
+
+# Static analysis
+melos run analyze
+# Alternative: dart analyze --fatal-infos --fatal-warnings
+
+# Code formatting
+melos run format
+# Alternative: dart format . && dart format --set-exit-if-changed .
+
+# Run tests
+melos run test
+# Alternative: flutter test && cd packages/core && flutter test
+
+# Translation validation
+melos run analyze-slang
+# Alternative: Manual slang validation
+
+# CI format check
+dart format --set-exit-if-changed .
+```
+
+### Direct Flutter Commands (Fallback)
+
+```bash
+# Run application
+flutter run -d chrome --web-port 8080
+flutter run -d <device_id>              # For mobile devices
+
+# Run tests (specific)
+flutter test test/widget_test.dart       # Single test file
+flutter test --coverage                  # With coverage
+
+# Build verification
+flutter build apk --debug                # Android debug build
+flutter build web --debug                # Web debug build
+flutter build ios --no-codesign --debug  # iOS debug build (macOS only)
+
+# Dependencies management
+flutter pub get                          # Install dependencies
+flutter pub upgrade                      # Upgrade dependencies
+flutter clean                           # Clean build cache
+```
+
+### Environment Setup (No Mise)
+
+```bash
+# Check Flutter environment
+flutter doctor -v                       # Detailed Flutter status
+flutter --version                       # Flutter version info
+dart --version                          # Dart version info
+
+# Setup development environment
+flutter config --enable-web             # Enable web support
+flutter config --enable-linux-desktop   # Enable Linux desktop (if needed)
+flutter config --enable-macos-desktop   # Enable macOS desktop (if needed)
+flutter config --enable-windows-desktop # Enable Windows desktop (if needed)
+```
+
+### Troubleshooting Guide (No Mise)
+
+#### Flutter Environment Issues
+
+```bash
+# Verify Flutter installation
+flutter doctor --verbose
+flutter config --list
+
+# Resolve Flutter issues
+flutter clean
+flutter pub get
+flutter pub upgrade
+
+# Reset Flutter configuration
+flutter config --clear-features
+flutter doctor
+```
+
+#### Version Management (No Mise)
+
+```bash
+# Use Flutter version from system PATH
+which flutter                           # Check Flutter location
+flutter channel                         # Check current channel
+flutter channel stable                  # Switch to stable channel (if needed)
+flutter upgrade                         # Upgrade Flutter
+
+# Check Dart version compatibility
+dart --version
+flutter --version
+```
+
+#### Build Issues
+
+```bash
+# Clean and rebuild
+flutter clean
+flutter pub get
+dart run build_runner clean
+dart run build_runner build --delete-conflicting-outputs
+
+# For Melos projects
+melos clean
+melos bootstrap
+melos run gen
+```
 
 ## GitHub CLI Integration (Unified Approach)
 
@@ -227,36 +363,10 @@ gh issue comment #123 --body "TDD Progress: Red(5min) → Green(10min) → Refac
 gh issue close #123 --comment "Fixed in PR #456. TDD Metrics: Tests(90%+), Security(✅), SOLID(✅), Performance(✅)"
 ```
 
-### Issue Template Field Extraction
-
-```bash
-# Extract acceptance criteria from Issue Template
-gh issue view #123 --json body | jq -r '.body' | sed -n '/### Acceptance Criteria/,/###/p' | grep -v "###"
-
-# Extract testing strategy requirements
-gh issue view #123 --json body | jq -r '.body' | sed -n '/### Testing Strategy/,/###/p' | grep "- \[ \]"
-
-# Extract AI review criteria
-gh issue view #123 --json body | jq -r '.body' | sed -n '/### AI Review-First Quality Criteria/,/###/p'
-
-# Validate required Issue Template fields
-gh issue view #123 --json body | jq -r '.body' | grep -E "(Functional Requirements|Security Requirements|Testing Strategy)" || echo "❌ Issue Template incomplete"
-```
-
 ### Pull Request Creation with Issue Template Compliance
 
 ```bash
-# Determine PR template based on issue labels
-ISSUE_LABELS=$(gh issue view #123 --json labels | jq -r '.labels[].name')
-if echo "$ISSUE_LABELS" | grep -q "enhancement\|feature"; then
-    TEMPLATE=".github/PULL_REQUEST_TEMPLATE/feature.md"
-elif echo "$ISSUE_LABELS" | grep -q "bug\|bugfix"; then
-    TEMPLATE=".github/PULL_REQUEST_TEMPLATE/bugfix.md"
-else
-    TEMPLATE=".github/PULL_REQUEST_TEMPLATE.md"
-fi
-
-# Create PR with Issue Template compliance validation
+# Create PR with Issue Template compliance validation (No Mise)
 gh pr create \
   --title "$(gh issue view #123 --json title | jq -r '.title') [#123]" \
   --body "$(cat <<EOF
@@ -266,550 +376,97 @@ gh pr create \
 ✅ F.I.R.S.T. Principles: All tests meet Fast, Independent, Repeatable, Self-validating, Timely criteria
 ✅ AI Review Cycles: 3-4 iterations completed (Security → SOLID → Performance)
 
-## TDD Quality Metrics
+## TDD Quality Metrics (No Mise)
 - Test Coverage: Unit(≥90%), Widget(≥80%), Critical(100%)
 - Cycle Time: Red(5min), Green(10min), Refactor(15min)
-- F.I.R.S.T. Compliance: $(test_first_compliance_score)
+- Environment: Flutter $(flutter --version | head -n 1)
 - AI Review Standards: Security(✅), SOLID(✅), Performance(✅)
+
+## Build Verification
+- flutter test: ✅ Passed
+- dart analyze: ✅ No issues
+- dart format: ✅ Formatted
+- flutter build: ✅ Successful
 
 Closes #123
 EOF
 )"
-
-# Monitor PR status and Issue Template validation
-gh pr view --json checks,reviews | jq '.checks[] | select(.name == "check-pr") | .status'
 ```
 
-## TDD + AI Review-First Completion Criteria
+## Quality Assurance Pipeline (No Mise)
 
-Task completion requires ALL conditions met following TDD + AI Review-First methodology:
-
-### 1. TDD Cycle Completion Standards
-
-- ✅ **Red Phase**: All failing tests created following F.I.R.S.T. principles
-- ✅ **Green Phase**: Minimal implementation achieves test success
-- ✅ **Refactor Phase**: 3-4 AI review cycles completed successfully with test integrity maintained
-- ✅ **Test Quality**: F.I.R.S.T. compliance validated (Fast < 0.1s, Independent, Repeatable, Self-validating, Timely)
-
-### 2. AI Review-First Quality Standards
-
-- ✅ **Security Review**: All HIGH priority vulnerabilities resolved (hardcoded secrets, input validation, secure storage)
-- ✅ **SOLID Principles**: MEDIUM priority architectural issues fixed (SRP, OCP, LSP, ISP, DIP compliance)
-- ✅ **Performance Review**: LOW priority optimization opportunities addressed (algorithm efficiency, resource usage)
-- ✅ **Review Constraint**: Each category summary ≤ 400 characters with actionable feedback
-
-### 3. Issue Template Compliance Standards
-
-- ✅ **Acceptance Criteria**: All Issue Template acceptance criteria validated and met
-- ✅ **Testing Strategy**: Issue Template testing requirements implemented and verified
-- ✅ **AI Review Criteria**: Issue Template AI review criteria satisfied with documented results
-- ✅ **Security Requirements**: Issue Template security requirements validated and implemented
-
-### 4. Quality Gate Validation
-
-- ✅ **Test Coverage**: Unit tests ≥90%, Widget tests ≥80%, Critical paths 100%
-- ✅ **TDD Metrics**: Red(≤5min), Green(≤10min), Refactor(≤15min) cycle times achieved
-- ✅ **Static Analysis**: `melos run analyze` passes with zero warnings/errors
-- ✅ **Code Formatting**: `melos run format` applied and validated
-- ✅ **Translation Validation**: `melos run analyze-slang` passes for i18n compliance
-
-### 5. Release Readiness with TDD Documentation
-
-- ✅ **Pull Request**: Created with Issue Template compliance validation and TDD metrics
-- ✅ **CI/CD Pipeline**: All GitHub Actions checks successful including test execution
-- ✅ **Issue Management**: GitHub Issue updated with TDD completion metrics and PR reference
-- ✅ **TDD Documentation**: F.I.R.S.T. compliance report and AI review cycle summary included
-
-### 6. Failure Recovery with TDD Validation
-
-- ✅ **Test Integrity**: Automatic correction maintains test success throughout recovery
-- ✅ **Quality Assurance**: Re-validation includes full TDD cycle verification
-- ✅ **F.I.R.S.T. Recovery**: Failed tests maintain independence and repeatability during fixes
-
-## GitHub Actions Integration
-
-### Quality Assurance Pipeline
-
-**Comprehensive Quality Framework**: Multi-stage validation ensuring production-ready code through automated and manual quality gates.
-
-```mermaid
-sequenceDiagram
-    participant Task as /task Command
-    participant Workspace as Git Worktree
-    participant Flutter as Flutter Env
-    participant AI as AI Reviewer
-    participant QA as Quality Assurance
-    participant GitHub as GitHub API
-    participant Actions as GitHub Actions
-    participant Notification as Completion Alert
-
-    Note over Task,Notification: Quality Assurance Pipeline Process
-
-    Task->>GitHub: Fetch Issue #123 details
-    GitHub-->>Task: Issue requirements
-
-    Task->>Workspace: Create isolated workspace
-    Workspace-->>Task: feature/issue-123 branch ready
-
-    Task->>Flutter: Setup mise environment
-    Flutter-->>Task: Flutter SDK configured
-
-    rect rgb(255, 248, 225)
-        Note over Task,AI: Phase 1: Minimal Implementation
-        Task->>AI: Generate walking skeleton
-        AI-->>Task: Basic functionality implemented
-    end
-
-    rect rgb(255, 235, 238)
-        Note over AI,QA: Phase 2: AI Review Cycles (3-4 iterations)
-
-        loop Security Review (Cycle 1)
-            AI->>QA: Security vulnerability scan
-            QA-->>AI: High priority issues found
-            AI->>AI: Apply security fixes
-        end
-
-        loop Architecture Review (Cycle 2)
-            AI->>QA: SOLID principle validation
-            QA-->>AI: Medium priority violations
-            AI->>AI: Refactor architecture
-        end
-
-        loop Performance Review (Cycle 3)
-            AI->>QA: Performance analysis
-            QA-->>AI: Optimization opportunities
-            AI->>AI: Apply performance improvements
-        end
-
-        AI->>QA: Final comprehensive review
-        QA-->>AI: All standards met
-    end
-
-    rect rgb(243, 229, 245)
-        Note over Task,Actions: Phase 3: Automated Validation
-
-        Task->>QA: Run melos analyze
-        QA-->>Task: ✅ Static analysis passed
-
-        Task->>QA: Run melos test
-        QA-->>Task: ✅ Tests passed
-
-        Task->>QA: Run melos ci:format
-        QA-->>Task: ✅ Format validation passed
-
-        Task->>Flutter: Build verification
-        Flutter-->>Task: ✅ Build successful
-    end
-
-    rect rgb(232, 245, 233)
-        Note over Task,Actions: Phase 4: CI/CD Integration
-
-        Task->>GitHub: Create Pull Request
-        GitHub-->>Actions: Trigger check-pr.yml workflow
-
-        Actions->>Actions: dart analyze
-        Actions->>Actions: flutter test
-        Actions->>Actions: flutter build
-        Actions->>Actions: slang validation
-
-        alt All Checks Pass
-            Actions-->>GitHub: ✅ Workflow succeeded
-            GitHub-->>Task: PR ready for review
-        else Check Failures
-            Actions-->>GitHub: ❌ Workflow failed
-            GitHub->>Task: Failure details
-
-            Task->>QA: Automatic failure recovery
-            alt Recoverable Failure
-                QA->>QA: Apply fixes (format/lint/deps)
-                QA->>GitHub: Commit automatic fixes
-                GitHub->>Actions: Re-trigger workflow
-            else Manual Intervention Required
-                QA-->>Notification: Human review needed
-            end
-        end
-    end
-
-    rect rgb(200, 230, 201)
-        Note over Task,Notification: Phase 5: Completion
-
-        Task->>GitHub: Update Issue with PR link
-        GitHub-->>Task: Issue updated
-
-        Task->>Workspace: Cleanup workspace (optional)
-        Workspace-->>Task: Resources released
-
-        Task->>Notification: Send completion alarm
-        Notification-->>Task: ✅ Quality pipeline complete
-    end
-
-    Note over Task,Notification: End-to-End Quality Assurance: 15-30 minutes
-```
-
-#### Stage 1: Code Quality Analysis
-
-**Flutter-Specific Checks**:
+### Stage 1: Code Quality Analysis (No Mise)
 
 ```bash
 # Static analysis with Flutter rules
-melos run analyze
-dart analyze --fatal-infos --fatal-warnings
+flutter analyze --fatal-infos --fatal-warnings
+dart analyze .
 
 # Format validation
-melos run ci:format
 dart format --set-exit-if-changed .
 
-# Translation validation
-melos run analyze:slang
+# Dependencies check
+flutter pub deps
+flutter pub outdated
 ```
 
-**Quality Metrics**:
-
-- Zero analyzer warnings/errors
-- 100% code formatting compliance
-- All translation keys validated
-
-#### Stage 2: Security Assessment
-
-**Automated Security Scan**:
+### Stage 2: Test Execution (No Mise)
 
 ```bash
-# Dependency vulnerability check
-flutter pub deps --json | jq '.packages[] | select(.kind == "direct")'
+# Run all tests
+flutter test --coverage
+flutter test --reporter=json > test_results.json
 
-# Sensitive data detection
-grep -r "API_KEY\|SECRET\|PASSWORD" --exclude-dir=.git .
+# Specific test types
+flutter test test/unit_test/        # Unit tests only
+flutter test test/widget_test.dart  # Widget tests only
+flutter test integration_test/      # Integration tests (if available)
 ```
 
-**Security Checklist**:
-
-- ✅ No hardcoded secrets or API keys
-- ✅ Proper input validation and sanitization
-- ✅ Secure data storage practices
-- ✅ Network security implementation
-
-#### Stage 3: AI Review Cycles (3-4 Iterations)
-
-**Structured Review Process**:
-
-```
-Review Template (400 character limit):
-1. Security vulnerabilities (HIGH)
-2. SOLID principle violations (MEDIUM)
-3. Performance optimization (LOW)
-
-Focus: Actionable feedback only
-```
-
-**Iterative Improvement**:
-
-- **Cycle 1**: Critical security issues
-- **Cycle 2**: Architectural violations
-- **Cycle 3**: Performance optimizations
-- **Cycle 4**: Final validation
-
-#### Stage 4: Test Execution
-
-**Comprehensive Testing**:
+### Stage 3: Build Verification (No Mise)
 
 ```bash
-# Unit tests
-melos run test
-
-# Widget tests (specific files)
-cd app && flutter test test/widget_test.dart
-
-# Integration tests (if available)
-cd app && flutter test integration_test/
+# Multi-platform builds
+flutter build apk --debug           # Android
+flutter build ios --no-codesign --debug  # iOS (macOS only)  
+flutter build web --debug           # Web
+flutter build linux --debug         # Linux (if enabled)
 ```
 
-**Coverage Requirements**:
-
-- Unit tests for all business logic
-- Widget tests for UI components
-- Integration tests for critical flows
-
-#### Stage 5: Build Verification
-
-**Multi-platform Build Tests**:
-
-```bash
-# Android build
-cd app && flutter build apk --debug
-
-# iOS build (macOS only)
-cd app && flutter build ios --no-codesign --debug
-
-# Web build
-cd app && flutter build web --debug
-```
-
-#### Stage 6: CI/CD Pipeline Integration
+### Stage 4: CI/CD Pipeline Integration
 
 **GitHub Actions Workflow**: `.github/workflows/check-pr.yml`
 
-**Monitored Checks**:
-
-- ✅ Static analysis (dart analyze)
-- ✅ Code formatting (dart format)
-- ✅ Test execution (flutter test)
-- ✅ Build verification (flutter build)
-- ✅ i18n validation (slang check)
-
-**Pipeline Monitoring**:
-
-```bash
-# Check workflow status
-gh run list --workflow=check-pr.yml --limit=1
-
-# View detailed logs
-gh run view --log
-
-# Re-trigger on failure
-gh workflow run check-pr.yml
-```
-
-#### Stage 7: Automatic Failure Recovery
-
-**Intelligent Error Resolution**:
-
-```bash
-# Failure Detection Pattern
-case "$failure_type" in
-    "format")
-        echo "🔧 Applying automatic formatting..."
-        melos run format
-        git add -A && git commit -m "style: apply automatic formatting"
-        ;;
-    "lint")
-        echo "🔧 Fixing lint issues..."
-        dart fix --apply
-        git add -A && git commit -m "fix: resolve lint issues"
-        ;;
-    "test")
-        echo "🔧 Analyzing test failures..."
-        # Run specific failing tests for diagnosis
-        melos run test --reporter=json > test_results.json
-        ;;
-    "build")
-        echo "🔧 Resolving build dependencies..."
-        melos clean && melos run get && melos run gen
-        ;;
-esac
-```
-
-**Recovery Success Rate**: Target 85% automatic resolution of common failures
-
-#### Stage 8: Quality Gate Validation
-
-**Final Quality Checklist**:
+**Monitored Checks (No Mise)**:
 
 ```yaml
-Quality Gates:
-  Security:
-    - No high/critical vulnerabilities: ✅
-    - Input validation implemented: ✅
-    - Secure storage practices: ✅
-
-  Architecture:
-    - SOLID principles followed: ✅
-    - Design patterns appropriate: ✅
-    - Code organization logical: ✅
-
-  Performance:
-    - No obvious bottlenecks: ✅
-    - Efficient algorithms used: ✅
-    - Resource usage optimized: ✅
-
-  Testing:
-    - Unit test coverage ≥80%: ✅
-    - Widget tests for UI: ✅
-    - Critical paths tested: ✅
-
-  Documentation:
-    - Code comments where needed: ✅
-    - README updated if required: ✅
-    - API documentation complete: ✅
+# Example .github/workflows/check-pr.yml modifications for no-mise
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'  # Specify version directly
+      - run: flutter --version
+      - run: dart pub global activate melos
+      - run: melos bootstrap
+      - run: melos run gen
+      - run: melos run analyze
+      - run: melos run test
+      - run: dart format --set-exit-if-changed .
+      - run: flutter build web --debug
 ```
 
-**Completion Criteria**: ALL quality gates must pass before proceeding to release
-
-**Human Escalation**: Quality gate failures after 2 automatic retry attempts require human intervention
-
-### Automatic Failure Response
-
-```bash
-# Failure Detection and Recovery
-❌ CI/CD Failure Detected
-📋 Analyze failure type and root cause
-🔧 Apply targeted corrections:
-   - Test failures → Fix test implementation
-   - Lint errors → Apply dart format
-   - Build errors → Resolve dependencies
-📤 Commit corrections and re-trigger pipeline
-🔄 Monitor re-execution until success
-✅ Confirm all checks pass before completion
-```
-
-## Parallel Execution with Quality Isolation
-
-### Workspace Isolation Strategy
-
-**Problem**: Prevent quality degradation when processing multiple Issues simultaneously
-
-**Solution**: Project-internal isolated environments
-
-```bash
-project-root/
-├── .claude-workspaces/          # Isolated work areas (gitignored)
-│   ├── issue-123/               # Issue #123 workspace
-│   │   ├── .claude-session      # Session isolation
-│   │   └── [git worktree]       # feature/issue-123 branch
-│   └── issue-456/               # Issue #456 workspace
-│       ├── .claude-session      # Independent session
-│       └── [git worktree]       # feature/issue-456 branch
-```
-
-### Quality Management for Parallel Execution
-
-```bash
-# Multiple Issue processing with unified quality standards
-/task #123 #456
-
-# Execution flow:
-# 📁 #123: Independent AI Review-First cycle in .claude-workspaces/issue-123/
-# 📁 #456: Independent AI Review-First cycle in .claude-workspaces/issue-456/
-# 🔄 Each workspace runs 3-4 review cycles independently
-# ✅ Completion notification after ALL Issues meet quality standards
-```
-
-### Conflict Prevention
-
-- **Duplicate Check**: Prevent concurrent processing of same Issue number
-- **Resource Monitoring**: Queue execution when CPU/memory exceeds 80%
-- **File Locking**: Use .lock files for exclusive workspace access
-- **Git Isolation**: Exclude `.claude-workspaces/` from version control
-
-### Workspace Management
-
-```bash
-# Monitor active workspaces
-/task-running
-
-# Cleanup completed workspaces
-ls .claude-workspaces/
-# issue-123/ (completed)  issue-456/ (in-progress)
-```
-
-## Execution Examples
-
-### Interactive Selection
-
-```bash
-/task
-
-📋 Available Issues:
-1) #123: User authentication feature implementation (enhancement, @me)
-2) #456: Bug fix: Login error handling (bug, @me)
-3) #789: New feature: Push notifications (enhancement, @me)
-
-? Select Issues to process [1-3, or multiple]: 1,3
-? Execute with selected Issues: #123, #789? [Y/n]: y
-
-🚀 Starting parallel execution with AI Review-First...
-```
-
-### Direct Execution
-
-```bash
-/task #123
-
-✅ Issue validation: #123 confirmed in GitHub
-✅ Workspace creation: .claude-workspaces/issue-123
-✅ Git worktree: feature/issue-123
-✅ Flutter environment: mise setup complete
-✅ AI Review-First: Quality standards configured
-🚀 Background execution started...
-📝 Implementing: User authentication feature
-⏰ Completion alarm scheduled
-```
-
-## Error Handling and Recovery
-
-### Input Validation Errors
-
-```bash
-/task #999999
-❌ Error: Issue '#999999' not found in repository
-💡 Use 'gh issue list' to view available Issues
-```
-
-### Review Cycle Failures
-
-```bash
-❌ Review cycle failed: Security vulnerabilities persist
-🔧 Re-analyzing high priority issues
-🔄 Continuing review cycle with additional focus
-📋 Will escalate to human review if unresolvable
-```
-
-### Quality Standard Violations
-
-```bash
-❌ Quality standards not met: Multiple SOLID violations detected
-📋 Detailed issue analysis:
-    - Single Responsibility: 3 violations
-    - Open/Closed Principle: 1 violation
-🎯 Initiating additional review cycle
-☝️ Human intervention required if standards remain unmet
-```
-
-## Best Practices and Limitations
-
-### Optimal Use Cases
-
-- **Well-defined Issue requirements** with clear acceptance criteria
-- **Feature additions** to existing Flutter codebase
-- **Bug fixes** with reproducible steps
-- **Code quality improvements** and refactoring
-- **Test case creation** and coverage improvement
-
-### Limitations (When NOT to Use)
-
-- **Large-scale system design** (1000+ lines) - requires human architecture
-- **Domain-specific complex logic** - needs specialized knowledge
-- **Cutting-edge technology** - outside AI training data
-- **Performance-critical optimizations** - requires deep system knowledge
-
-### Success Factors
-
-1. **Clear Issue descriptions** with specific requirements
-2. **Existing code patterns** for AI to follow
-3. **Comprehensive test coverage** for validation
-4. **Well-defined quality metrics** for objective assessment
-
-## Project Dependencies and Configuration
-
-### Required Technology Stack
-
-- **Framework**: Flutter (Workspace/Monorepo structure)
-- **Version Management**: mise (polyglot tool version manager)
-- **Task Management**: GitHub Issues
-- **Development Workflow**: git worktree for parallel development
-- **State Management**: Riverpod (hooks_riverpod, riverpod_annotation)
-- **Navigation**: go_router (declarative routing)
-- **Internationalization**: slang (type-safe translations)
-- **Build Tools**: build_runner, freezed
-- **Monorepo Management**: Melos + pub workspace
-
-### Environment Variables
+### Environment Variables (No Mise)
 
 ```bash
 export ENABLE_BACKGROUND_TASKS=true
-export FLUTTER_VERSION_MANAGEMENT=mise
+export FLUTTER_VERSION_MANAGEMENT=system  # Changed from 'mise' to 'system'
 export TASK_MANAGEMENT_SYSTEM=github
 export PARALLEL_DEVELOPMENT=git_worktree
-export PR_LANGUAGE=japanese
+export PR_LANGUAGE=korean
 export COMPLETION_NOTIFICATION=alarm
 export INTERACTIVE_MODE=true
 export ISSUE_SELECTION_UI=enabled
@@ -821,118 +478,162 @@ export CLAUDE_WORKSPACE_DIR=".claude-workspaces"
 export CLAUDE_MEMORY_ISOLATION=true
 export GITHUB_ACTIONS_CHECK=true
 export CHECK_PR_WORKFLOW="check-pr.yml"
+
+# Flutter-specific environment variables
+export FLUTTER_ROOT=$(which flutter | sed 's/\/bin\/flutter//')
+export PATH=$FLUTTER_ROOT/bin:$PATH
 ```
 
-### .gitignore Setup
+## Project Dependencies and Configuration (No Mise)
 
-```
-.claude-workspaces/
-*.lock
-.claude-session
-```
+### Required Technology Stack
 
-### Flutter Commands Integration
+- **Framework**: Flutter (Workspace/Monorepo structure)
+- **Version Management**: System Flutter installation (no mise required)
+- **Task Management**: GitHub Issues
+- **Development Workflow**: git worktree for parallel development
+- **State Management**: Riverpod (hooks_riverpod, riverpod_annotation)
+- **Navigation**: go_router (declarative routing)
+- **Internationalization**: slang (type-safe translations)
+- **Build Tools**: build_runner, freezed
+- **Monorepo Management**: Melos + pub workspace
 
-#### Melos Commands (Primary)
+### System Requirements (No Mise)
 
 ```bash
-# Code generation (freezed, riverpod, go_router, slang)
+# Required system installations
+flutter                              # Flutter SDK (stable channel)
+dart                                # Dart SDK (included with Flutter)
+git                                 # Version control
+gh                                  # GitHub CLI
+
+# Optional global packages
+dart pub global activate melos      # For monorepo management
+dart pub global activate build_runner  # For code generation
+```
+
+### Development Setup (No Mise)
+
+```bash
+# 1. Verify system requirements
+flutter doctor -v
+gh auth status
+git --version
+
+# 2. Setup Flutter environment
+flutter config --enable-web
+flutter channel stable
+flutter upgrade
+
+# 3. Install global dependencies
+dart pub global activate melos
+
+# 4. Clone and setup project
+git clone <repository-url>
+cd <project-directory>
+melos bootstrap
 melos run gen
 
-# Install dependencies
-melos run get
-
-# Static analysis
-melos run analyze
-
-# slang translation check
-melos run analyze:slang
-
-# Code formatting
-melos run format
-
-# Run tests
-melos run test
-
-# CI format check
-melos run ci:format
+# 5. Verify setup
+flutter test
+flutter analyze
+dart format --set-exit-if-changed .
 ```
 
-#### Direct Flutter Commands (Fallback)
+## Execution Examples (No Mise)
+
+### Interactive Selection
 
 ```bash
-# Run application
-cd app && flutter run
+/task-no-mise
 
-# Run tests (single file)
-cd app && flutter test test/widget_test.dart
+📋 Available Issues:
+1) #123: User authentication feature implementation (enhancement, @me)
+2) #456: Bug fix: Login error handling (bug, @me)  
+3) #789: New feature: Push notifications (enhancement, @me)
 
-# Build
-cd app && flutter build apk
-cd app && flutter build ios --no-codesign
+? Select Issues to process [1-3, or multiple]: 1,3
+? Execute with selected Issues: #123, #789? [Y/n]: y
+
+🚀 Starting parallel execution with AI Review-First (No Mise)...
 ```
 
-### PR Creation Template Selection
-
-The command automatically selects the appropriate PR template based on issue labels:
+### Direct Execution
 
 ```bash
-# For feature issues (labels: enhancement, feature)
-.github/PULL_REQUEST_TEMPLATE/feature.md
+/task-no-mise #123
 
-# For bug fixes (labels: bug, bugfix)
-.github/PULL_REQUEST_TEMPLATE/bugfix.md
-
-# Default template if no specific label
-.github/PULL_REQUEST_TEMPLATE.md
+✅ Issue validation: #123 confirmed in GitHub
+✅ Workspace creation: .claude-workspaces/issue-123
+✅ Git worktree: feature/issue-123
+✅ Flutter environment: System Flutter $(flutter --version | head -n 1)
+✅ AI Review-First: Quality standards configured
+🚀 Background execution started...
+📝 Implementing: User authentication feature
+⏰ Completion alarm scheduled
 ```
 
-### Troubleshooting Guide
+## Error Handling and Recovery (No Mise)
 
-#### GitHub CLI Authentication Error
+### Flutter Environment Errors
 
 ```bash
-# Re-authenticate GitHub CLI
-gh auth login
+# Flutter not found
+/task-no-mise #123
+❌ Error: Flutter not found in system PATH
+💡 Install Flutter: https://docs.flutter.dev/get-started/install
+
+# Flutter doctor issues  
+❌ Error: Flutter doctor reported issues
+💡 Run: flutter doctor -v
+💡 Resolve all issues before continuing
 ```
 
-#### mise Version Conflict
+### Dependency Errors
 
 ```bash
-# Reset Flutter version
-mise install
+# Melos not available
+❌ Error: Melos not found
+🔧 Installing Melos globally...
+dart pub global activate melos
+✅ Melos installed successfully
+
+# Dependencies out of sync
+❌ Error: Dependencies not synchronized
+🔧 Resolving dependencies...
 flutter clean
 flutter pub get
+melos bootstrap
 ```
 
-#### git worktree Creation Failure
+## Best Practices (No Mise)
+
+### System Flutter Management
+
+1. **Use Stable Channel**: `flutter channel stable`
+2. **Keep Updated**: Regular `flutter upgrade`
+3. **Verify Health**: `flutter doctor` before development
+4. **Path Management**: Ensure Flutter bin in system PATH
+
+### Performance Optimization
+
+1. **Build Cache**: Use `flutter clean` judiciously
+2. **Dependency Management**: Regular `flutter pub upgrade`
+3. **Code Generation**: Efficient `build_runner` usage
+4. **Testing**: Fast test execution with focused test suites
+
+### Version Consistency
 
 ```bash
-# Check and delete existing worktrees
-git worktree list
-git worktree remove [worktree_path]
+# Document Flutter version in project
+echo "Flutter $(flutter --version)" > .flutter-version
+echo "Dart $(dart --version)" >> .flutter-version
+
+# Team consistency
+flutter --version                    # Share output with team
+dart --version                       # Ensure same Dart version
 ```
-
-#### Background Tasks Not Working
-
-```bash
-# Check environment variables
-echo $ENABLE_BACKGROUND_TASKS
-export ENABLE_BACKGROUND_TASKS=true
-```
-
-### Performance Optimization Settings
-
-- Parallel execution limit: Adjust according to CPU usage
-- Memory usage monitoring: Control when creating large numbers of worktrees
-- Resource monitoring: CPU/memory usage 80% threshold
-
-### Security Considerations
-
-- Safe management of GitHub tokens
-- Proper configuration of git authentication credentials
-- Careful handling of code containing sensitive information
 
 ---
 
-**Note**: This command prioritizes code quality through AI Review-First methodology and requires git worktree support for parallel execution. Expect 3-4 review iterations per Issue to achieve production-ready standards.
+**Note**: This no-mise version maintains all quality standards and TDD + AI Review-First methodology while using system-installed Flutter tools instead of mise for version management.
