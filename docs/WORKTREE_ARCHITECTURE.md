@@ -112,116 +112,116 @@ flowchart TB
     class GitDir,GM internal
 ```
 
-## .gitディレクトリ直下への配置が問題となる理由
+## .git 디렉토리 직하 배치가 문제가 되는 이유
 
-### 1. 隠しディレクトリによるアクセシビリティ問題
+### 1. 숨김 디렉토리로 인한 접근성 문제
 
-#### 問題のある配置例
+#### 문제가 있는 배치 예시
 
 ```bash
 flutter_template_project/
 ├── .git/
-│   ├── worktrees/              # ❌ 隠しディレクトリ内で見えにくい
+│   ├── worktrees/              # ❌ 숨김 디렉토리 내부로 보기 어려움
 │   │   ├── feature-FEAT-123/
 │   │   └── feature-UI-456/
 ```
 
-#### 具体的な問題
+#### 구체적인 문제
 
-- **ファイルマネージャー**: 多くのツールで隠しディレクトリが表示されない
-- **開発者体験**: 作業場所が把握しにくい
-- **新規参加者**: プロジェクト構造の理解が困難
+- **파일 매니저**: 대부분의 도구에서 숨김 디렉토리가 표시되지 않음
+- **개발자 경험**: 작업 장소 파악이 어려움
+- **신규 참여자**: 프로젝트 구조의 이해가 곤란
 
-### 2. IDE・エディタの認識問題
+### 2. IDE·에디터의 인식 문제
 
-#### VS Code での問題例
+#### VS Code에서의 문제 예시
 
 ```json
-// .vscode/settings.json が正しく認識されない
+// .vscode/settings.json이 올바르게 인식되지 않음
 {
   "dart.flutterSdkPath": "/path/to/flutter",
   "dart.analysisServerFolder": ".dart_tool"
 }
 ```
 
-#### IntelliJ IDEA での問題例
+#### IntelliJ IDEA에서의 문제 예시
 
 ```bash
 .git/worktrees/feature-FEAT-123/app/
-# ↑ IDEがプロジェクトルートとして認識しにくい
-# ↑ Flutter SDKの検出に失敗する可能性
-# ↑ 設定ファイル（.idea/）が正しく動作しない
+# ↑ IDE가 프로젝트 루트로 인식하기 어려움
+# ↑ Flutter SDK 검출에 실패할 가능성
+# ↑ 설정 파일(.idea/)이 올바르게 동작하지 않음
 ```
 
-#### 影響範囲
+#### 영향 범위
 
-- Flutter SDK の自動検出失敗
-- デバッガーやホットリロードの問題
-- プラグインや拡張機能の誤動作
-- コード補完・解析機能の低下
+- Flutter SDK의 자동 검출 실패
+- 디버거나 핫 리로드의 문제
+- 플러그인이나 확장 기능의 오동작
+- 코드 완성·분석 기능의 저하
 
-### 3. Git内部構造との競合
+### 3. Git 내부 구조와의 경합
 
-#### Gitの既存構造
+#### Git의 기존 구조
 
 ```bash
 .git/
-├── worktrees/                  # ⚠️ Gitが既に使用中
-│   ├── feature-FEAT-123/       # worktreeのメタデータ
-│   │   ├── HEAD               # ブランチ参照
-│   │   ├── commondir          # 共通ディレクトリ参照
-│   │   ├── gitdir             # .gitディレクトリ参照
-│   │   └── locked             # ロック状態
+├── worktrees/                  # ⚠️ Git이 이미 사용 중
+│   ├── feature-FEAT-123/       # worktree의 메타데이터
+│   │   ├── HEAD               # 브랜치 참조
+│   │   ├── commondir          # 공통 디렉토리 참조
+│   │   ├── gitdir             # .git 디렉토리 참조
+│   │   └── locked             # 잠금 상태
 ```
 
-#### 競合による問題
+#### 경합으로 인한 문제
 
-- **名前空間の衝突**: 同名ディレクトリでの混乱
-- **内部コマンドの誤動作**: `git worktree prune`等での予期しない動作
-- **メタデータの破損リスク**: Git更新時の互換性問題
-- **デバッグの困難**: 内部ファイルと作業ファイルの区別が困難
+- **네임스페이스의 충돌**: 동명 디렉토리로 인한 혼란
+- **내부 명령의 오동작**: `git worktree prune` 등에서 예기치 않은 동작
+- **메타데이터의 파손 위험**: Git 업데이트 시의 호환성 문제
+- **디버깅의 어려움**: 내부 파일과 작업 파일의 구별이 곤란
 
-### 4. バックアップ・同期ツールでの除外
+### 4. 백업·동기 도구에서의 제외
 
-#### 一般的なバックアップ設定
+#### 일반적인 백업 설정
 
 ```bash
-# rsyncでの除外設定
+# rsync에서의 제외 설정
 rsync --exclude='.git' source/ dest/
-# ↑ .git配下のworktreesも除外されてしまう
+# ↑ .git 하위의 worktrees도 제외되어 버림
 
 # .gitignore_global
 .git/
-# ↑ 多くの同期ツールで除外対象
+# ↑ 많은 동기 도구에서 제외 대상
 ```
 
-#### 影響するツール
+#### 영향받는 도구
 
-- **クラウド同期**: Google Drive, Dropbox, OneDrive
-- **バックアップソフト**: Time Machine, Carbon Copy Cloner
-- **CI/CDシステム**: GitHub Actions, GitLab CI
+- **클라우드 동기**: Google Drive, Dropbox, OneDrive
+- **백업 소프트**: Time Machine, Carbon Copy Cloner
+- **CI/CD 시스템**: GitHub Actions, GitLab CI
 
-### 5. 権限・セキュリティ問題
+### 5. 권한·보안 문제
 
-#### 権限設定の制約
+#### 권한 설정의 제약
 
 ```bash
-# .gitディレクトリの一般的な権限
-drwxr-xr-x  .git/                # 読み取り制限
+# .git 디렉토리의 일반적인 권한
+drwxr-xr-x  .git/                # 읽기 제한
 
-# 作業ディレクトリに必要な権限
-drwxrwxrwx  worktrees/feature-FEAT-123/  # 読み書き実行権限
+# 작업 디렉토리에 필요한 권한
+drwxrwxrwx  worktrees/feature-FEAT-123/  # 읽기쓰기실행 권한
 ```
 
-#### セキュリティポリシーでの制約
+#### 보안 정책에서의 제약
 
-- 企業環境での`.git`アクセス制限
-- セキュリティソフトによる隠しディレクトリ監視
-- CI/CDでの権限エラー
+- 기업 환경에서의 `.git` 액세스 제한
+- 보안 소프트에 의한 숨김 디렉토리 감시
+- CI/CD에서의 권한 오류
 
-### 6. 管理スクリプトの複雑化
+### 6. 관리 스크립트의 복잡화
 
-#### 現在のスクリプト（シンプル）
+#### 현재의 스크립트(간단함)
 
 ```bash
 # scripts/manage-flutter-tasks.sh
@@ -234,16 +234,16 @@ for workspace in .claude-workspaces/*/; do
 done
 ```
 
-#### .git配下の場合（複雑）
+#### .git 하위의 경우(복잡함)
 
 ```bash
-# 複雑な処理が必要
+# 복잡한 처리가 필요
 for worktree in .git/worktrees/*/; do
-    # 隠しディレクトリチェック
+    # 숨김 디렉토리 체크
     if [[ "$(basename "$worktree")" != "."* ]]; then
-        # 権限チェック
+        # 권한 체크
         if [ -r "$worktree" ] && [ -w "$worktree" ]; then
-            # Git内部ファイルとの区別
+            # Git 내부 파일과의 구별
             if [ -f "$worktree/app/pubspec.yaml" ]; then
                 cd "$worktree"
                 flutter analyze
@@ -254,9 +254,9 @@ for worktree in .git/worktrees/*/; do
 done
 ```
 
-## ルートディレクトリ配置の利点
+## 루트 디렉토리 배치의 장점
 
-### 1. 明確な可視性
+### 1. 명확한 가시성
 
 ```bash
 flutter_template_project/

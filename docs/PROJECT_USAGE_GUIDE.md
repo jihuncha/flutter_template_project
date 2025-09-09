@@ -266,7 +266,7 @@ SOLID 원칙 자동 검증:
 
 ```bash
 # 작업 모드 설정
-export AUTO_CONFIRM_WITH_ARGS=true      # 인수 있을 때 자동 확인
+export AUTO_CONFIRM_WITH_ARGS=true      # 매개변수 있을 때 자동 확인
 export SILENT_MODE_WITH_ARGS=false      # 진행상황 계속 표시
 export ERROR_ONLY_OUTPUT=false          # 에러 외 출력도 표시
 

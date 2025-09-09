@@ -414,7 +414,7 @@ describe('[클래스명]', () => {
     const target = new [클래스명]();
 
     // When: 실행 (1행)
-    const result = target.[메서드명]([인수]);
+    const result = target.[메서드명]([매개변수]);
 
     // Then: 검증 (1행)
     expect(result).toBe([기대값]);

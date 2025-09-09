@@ -62,8 +62,8 @@ JWT 기반 사용자 인증 기능을 구현해주세요.
 
 ## 参照文献
 
-- [Claude 4 Best Practices (Anthropic公式)](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices)
-- [AIレビューファースト設計 (Zenn)](https://zenn.dev/caphtech/articles/ai-review-first-design)
+- [Claude 4 Best Practices (Anthropic공식홈페이지)](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices)
+- [AI리뷰 퍼스트 설계 (Zenn_일본어)](https://zenn.dev/caphtech/articles/ai-review-first-design)
 - [TEST_DRIVEN_DEVELOPMENT](TEST_DRIVEN_DEVELOPMENT.md)
 
 ## 1. 핵심 원칙
